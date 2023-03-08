@@ -1,0 +1,18 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: 'jdbc:h2:mem:ff8;TRUNCATE_LARGE_LENGTH=TRUE'
+    hikari:
+      auto-commit: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8000/realms/master
+
+server:
+  error:
+    whitelabel:
+      enabled: false

@@ -1,0 +1,46 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yo1000",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "@babel/preset-react": "^7.18.6",
+    "@emotion/babel-preset-css-prop": "^11.10.0",
+    "@svgr/webpack": "^6.3.1",
+    "babel-loader": "^8.2.5",
+    "dotenv-webpack": "^8.0.1",
+    "css-loader": "^6.7.3",
+    "less-loader": "^11.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.6",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.0"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.10.0",
+    "@emotion/react": "^11.10.4",
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@primer/octicons-react": "^17.5.0",
+    "bootstrap": "^5.2.1",
+    "dompurify": "^2.4.0",
+    "oidc-client-ts": "^2.2.2",
+    "process": "^0.11.10",
+    "react-bootstrap": "^2.5.0",
+    "react-oidc-context": "^2.2.2",
+    "react-router-dom": "^6.4.5"
+  }
+}

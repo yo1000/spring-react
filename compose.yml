@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.0
+    ports:
+      - "8000:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: true
+    command:
+      - start-dev
+
+  keycloak-setup:
+    image: everpeace/curl-jq
+    healthcheck:
+      test: test -e /tmp/READY || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 15
+    environment:
+      KEYCLOAK_URL_BASE: http://keycloak:8080
+      KEYCLOAK_REALM: master
+      KEYCLOAK_CLIENT_ID: spring-react
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak-setup.sh:/tmp/keycloak-setup.sh
+      - ./src/main/resources/frontend/.env.development:/tmp/.env
+    entrypoint: /bin/sh -c "/tmp/keycloak-setup.sh"

@@ -9,7 +9,7 @@ docker compose up
 ```
 
 ```shell
-./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments='
 -Dspring.jpa.show-sql=true
 -Dspring.h2.console.enabled=true
 -Dserver.error.whitelabel.enabled=true
@@ -20,7 +20,8 @@ docker compose up
 -Dapp.frontend.oidc.authorizationEndpoint=http://localhost:8000/realms/master/protocol/openid-connect/auth
 -Dapp.frontend.oidc.tokenEndpoint=http://localhost:8000/realms/master/protocol/openid-connect/token
 -Dapp.frontend.oidc.userinfoEndpoint=http://localhost:8000/realms/master/protocol/openid-connect/userinfo
-"
+-Dapp.frontend.oidc.signoutUriTemplate=${authority}/realms/master/protocol/openid-connect/logout?client_id=${clientId}&post_logout_redirect_uri=${redirectUri}&id_token_hint=${idToken}
+'
 ```
 
 ```shell

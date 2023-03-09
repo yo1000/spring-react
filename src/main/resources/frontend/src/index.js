@@ -10,6 +10,13 @@ const root = ReactDOM.createRoot(
   document.getElementById('root')
 )
 
+function format(template, params) {
+  return !params ? template : new Function(
+    ...Object.keys(params),
+    `return \`${template}\``
+  )(...Object.values(params).map(p => p ?? ''))
+}
+
 fetch('/config')
   .then(resp => {
     if (!resp.ok) throw new Error(resp.statusText)
@@ -38,12 +45,20 @@ fetch('/config')
         )
       },
       onRemoveUser: () => {
+        const template = data.oidc.signoutUriTemplate
+
+        const authority = data.oidc.authority
         const clientId = data.oidc.clientId
         const redirectUri = encodeURIComponent(data.oidc.redirectUri)
         const idToken = localStorage.getItem("idtoken")
         localStorage.removeItem("idtoken")
 
-        window.location = `${data.oidc.authority}/realms/master/protocol/openid-connect/logout?client_id=${clientId}&post_logout_redirect_uri=${redirectUri}&id_token_hint=${idToken}`
+        window.location = format(template, {
+          authority: authority,
+          clientId: clientId,
+          redirectUri: redirectUri,
+          idToken: idToken
+        })
       }
     }
 
@@ -82,12 +97,21 @@ fetch('/config')
         )
       },
       onRemoveUser: () => {
+        const template = process.env.OIDC_SIGNOUT_URI_TEMPLATE
+
+        const authority = process.env.OIDC_AUTHORITY
         const clientId = process.env.OIDC_CLIENT_ID
         const redirectUri = encodeURIComponent(process.env.OIDC_REDIRECT_URI)
         const idToken = localStorage.getItem("idtoken")
         localStorage.removeItem("idtoken")
 
-        window.location = `${process.env.OIDC_AUTHORITY}/realms/master/protocol/openid-connect/logout?client_id=${clientId}&post_logout_redirect_uri=${redirectUri}&id_token_hint=${idToken}`
+        window.location = format(template, {
+          authority: authority,
+          clientId: clientId,
+          redirectUri: redirectUri,
+          idToken: idToken
+        })
+
       }
     }
 

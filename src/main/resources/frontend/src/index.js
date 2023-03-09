@@ -81,9 +81,9 @@ fetch('/config')
       redirect_uri: process.env.OIDC_REDIRECT_URI,
       response_type: 'code',
       metadata: {
-        authorization_endpoint: `${process.env.OIDC_AUTHORITY}/realms/master/protocol/openid-connect/auth`,
-        token_endpoint: `${process.env.OIDC_AUTHORITY}/realms/master/protocol/openid-connect/token`,
-        userinfo_endpoint: `${process.env.OIDC_AUTHORITY}/realms/master/protocol/openid-connect/userinfo`,
+        authorization_endpoint: process.env.OIDC_AUTHORIZATION_ENDPOINT,
+        token_endpoint: process.env.OIDC_TOKEN_ENDPOINT,
+        userinfo_endpoint: process.env.OIDC_USERINFO_ENDPOINT,
       },
       scope: "openid",
       loadUserInfo: true,

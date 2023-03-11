@@ -1,4 +1,4 @@
-import {Container, Table} from "react-bootstrap";
+import {Table} from "react-bootstrap";
 import {useAuth} from "react-oidc-context";
 import {css} from "@emotion/react";
 

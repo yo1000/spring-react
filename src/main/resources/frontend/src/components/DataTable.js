@@ -1,5 +1,6 @@
 import {Table} from "react-bootstrap";
 import React from "react";
+import {css} from "@emotion/react";
 
 /**
  *
@@ -56,8 +57,17 @@ import React from "react";
 export default function DataTable({
   data, head, keys, editableKeys = [], combinationKey = ""
 }) {
+  const style = css`
+    .evenRow {
+      --bs-table-accent-bg: var(--bs-table-striped-bg);
+      color: var(--bs-table-striped-color);
+    }
+    .oddRow {
+    }
+  `
+
   return (
-    <Table hover>
+    <Table css={style}>
       <thead>
       <tr>
         {keys && keys.length && keys.map(k => (
@@ -169,6 +179,7 @@ function DataRow({
       {keys && keys.length && keys.map((key) => {
         return (
           <td
+            className={rowIndex % 2 == 0 ? "evenRow" : "oddRow"}
             rowSpan={(!key.startsWith(`${listKeyPrefix}.`)) ? rowSpan : null}
             data-row={rowIndex}
             data-row-sub={rowSubIndex}

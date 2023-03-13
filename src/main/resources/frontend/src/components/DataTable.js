@@ -64,6 +64,13 @@ export default function DataTable({
     }
     .oddRow {
     }
+    input[readonly] {
+      background-color: #e9ecef;;
+      border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 2px;
+    }
   `
 
   return (
@@ -185,7 +192,7 @@ function DataRow({
             data-row-sub={rowSubIndex}
             data-col={keyIndexes[key]}
           >
-            {editableKeys ? <input defaultValue={editableKeys.includes(key) ? datum[key] : null} value={!editableKeys.includes(key) ? datum[key] : null} onKeyDown={(event) => {
+            {editableKeys ? <input defaultValue={editableKeys.includes(key) ? datum[key] : null} value={!editableKeys.includes(key) ? datum[key] : null} readOnly={!editableKeys.includes(key)} onKeyDown={(event) => {
               const pos = event.target.closest("td").dataset
               const r = pos.row * 1 || 0
               const rs = pos.rowSub * 1 || 0

@@ -248,3 +248,139 @@ INSERT INTO weapon(id, name, price, str, hit) VALUES(29, 'Machine Gun', null, 14
 INSERT INTO weapon(id, name, price, str, hit) VALUES(30, 'Katal', null, 13, 0);
 INSERT INTO weapon(id, name, price, str, hit) VALUES(31, 'Harpoon', null, 16, 0);
 INSERT INTO weapon(id, name, price, str, hit) VALUES(32, 'Hyperion', null, 12, 0);
+
+CREATE TABLE weapon_remodel(
+    id integer PRIMARY KEY,
+    weapon_id integer NOT NULL,
+    item_id integer NOT NULL,
+    quantity integer NOT NULL,
+    FOREIGN KEY (weapon_id) REFERENCES weapon(id),
+    FOREIGN KEY (item_id) REFERENCES item(id)
+);
+
+-- Revolver
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(1, 1, 109, 6);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(2, 1, 118, 2);
+
+-- Shear Trigger
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(3, 2, 74, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(4, 2, 118, 4);
+
+-- Cutting Trigger
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(5, 3, 120, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(6, 3, 118, 8);
+
+-- Flame Saber
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(7, 4, 123, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(8, 4, 88, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(9, 4, 118, 4);
+
+-- Twin Lance
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(10, 5, 136, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(11, 5, 128, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(12, 5, 118, 12);
+
+-- Punishment
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(13, 6, 144, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(14, 6, 75, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(15, 6, 88, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(16, 6, 118, 8);
+
+-- Lion Heart
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(17, 7, 90, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(18, 7, 126, 4);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(19, 7, 43, 12);
+
+-- Pinwheel
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(20, 8, 109, 3);
+
+-- Valkyrie
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(21, 9, 132, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(22, 9, 110, 1);
+
+-- Rising Sun
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(23, 10, 119, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(24, 10, 118, 8);
+
+-- Cardinal
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(25, 11, 114, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(26, 11, 120, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(27, 11, 117, 1);
+
+-- Shooting Star
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(28, 12, 137, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(29, 12, 82, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(30, 12, 92, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(31, 12, 76, 2);
+
+-- Chain Whip
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(32, 13, 109, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(33, 13, 151, 1);
+
+-- Slaying Tail
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(34, 14, 110, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(35, 14, 117, 1);
+
+-- Red Scorpion
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(36, 15, 112, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(37, 15, 138, 2);
+
+-- Save the Queen
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(38, 16, 160, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(39, 16, 117, 4);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(40, 16, 76, 4);
+
+-- Metal Knuckle
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(41, 17, 139, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(42, 17, 109, 4);
+
+-- Maverick
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(43, 18, 140, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(44, 18, 151, 1);
+
+-- Gauntlet
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(45, 19, 138, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(46, 19, 122, 1);
+
+-- Ehrgeiz
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(47, 20, 90, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(48, 20, 138, 4);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(49, 20, 122, 1);
+
+-- Flail
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(50, 21, 109, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(51, 21, 127, 1);
+
+-- Morning Star
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(52, 22, 134, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(53, 22, 117, 2);
+
+-- Crescent Wish
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(54, 23, 159, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(55, 23, 125, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(56, 23, 117, 4);
+
+-- Strange Vision
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(57, 24, 90, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(58, 24, 75, 3);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(59, 24, 153, 2);
+
+-- Valiant
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(60, 25, 74, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(61, 25, 118, 4);
+
+-- Ulysses
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(62, 26, 74, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(63, 26, 127, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(64, 26, 118, 2);
+
+-- Bismarck
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(65, 27, 74, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(66, 27, 131, 4);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(67, 27, 118, 8);
+
+-- Exeter
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(68, 28, 136, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(69, 28, 135, 1);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(70, 28, 75, 2);
+INSERT INTO weapon_remodel(id, weapon_id, item_id, quantity) VALUES(71, 28, 118, 18);

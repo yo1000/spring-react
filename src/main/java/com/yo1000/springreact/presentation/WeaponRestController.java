@@ -1,7 +1,7 @@
 package com.yo1000.springreact.presentation;
 
-import com.yo1000.springreact.domain.Weapon;
-import com.yo1000.springreact.domain.WeaponRepository;
+import com.yo1000.springreact.domain.WeaponRemodel;
+import com.yo1000.springreact.domain.WeaponRemodelRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,30 +9,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/weapons")
 public class WeaponRestController {
-    private WeaponRepository weaponRepos;
+    private WeaponRemodelRepository weaponRemodelRepos;
 
-    public WeaponRestController(WeaponRepository weaponRepos) {
-        this.weaponRepos = weaponRepos;
+    public WeaponRestController(WeaponRemodelRepository weaponRemodelRepos) {
+        this.weaponRemodelRepos = weaponRemodelRepos;
     }
 
     @GetMapping
-    public List<Weapon> getByName(
+    public List<WeaponRemodel> getByName(
             @RequestParam(name = "name", required = false)
             String name
     ) {
         if (name == null) {
-            return weaponRepos.findAll();
+            return weaponRemodelRepos.findAll();
         } else {
-            return weaponRepos.findAllByNameContaining(name);
+            return weaponRemodelRepos.findAllByWeaponNameContaining(name);
         }
     }
 
     @GetMapping("/{id}")
-    public Weapon getById(
+    public WeaponRemodel getById(
             @PathVariable("id")
             int id
     ) {
-        return weaponRepos.findById(id);
+        return weaponRemodelRepos.findByWeaponId(id);
     }
-
 }

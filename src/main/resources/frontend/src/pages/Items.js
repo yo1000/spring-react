@@ -27,6 +27,6 @@ export default function Items() {
       "name": "Name",
       "price": "Price",
       "sellPrice": "Sell price"
-    }} editable={true} combinationKey="alt"/>
+    }} combinationKey="alt"/>
   )
 }

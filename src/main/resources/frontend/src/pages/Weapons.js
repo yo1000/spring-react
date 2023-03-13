@@ -18,16 +18,44 @@ export default function Weapons() {
       },
     })
     .then(resp => resp.json())
+    .then(data => data.map(d => ({
+      "id": d.weapon.id,
+      "name": d.weapon.name,
+      "price": d.weapon.price,
+      "str": d.weapon.str,
+      "hit": d.weapon.hit,
+      "items": d.itemQuantities.map(itemQty => ({
+        "name": itemQty.item.name,
+        "quantity": itemQty.quantity,
+      })),
+    })).sort((a, b) => a.id - b.id))
     .then(data => setWeapons(data))
   }, [auth])
 
   return (
-    <DataTable keys={["id", "name", "price", "str", "hit"]} data={weapons} head={{
+    <DataTable data={weapons} keys={[
+      "id",
+      "name",
+      "price",
+      "str",
+      "hit",
+      "items.name",
+      "items.quantity",
+    ]} head={{
       "id": "ID",
       "name": "Name",
       "price": "Price",
       "str": "Str",
-      "hit": "Hit"
-    }}/>
+      "hit": "Hit",
+      "items.name": "Remodel item",
+      "items.quantity": "Remodel qty",
+    }} editableKeys={[
+      "name",
+      "price",
+      "str",
+      "hit",
+      "items.name",
+      "items.quantity",
+    ]} />
   )
 }

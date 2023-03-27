@@ -22,11 +22,22 @@ export default function Items() {
   }, [auth])
 
   return (
-    <DataTable keys={["id", "name", "price", "sellPrice"]} data={items} head={{
-      "id": "ID",
-      "name": "Name",
-      "price": "Price",
-      "sellPrice": "Sell price"
-    }} combinationKey="alt"/>
+    <DataTable
+      id="dataTable"
+      data={items}
+      props={[{
+        name: "id",
+        head: "ID",
+      }, {
+        name: "name",
+        head: "Name",
+      }, {
+        name: "price",
+        head: "Price",
+      }, {
+        name: "sellPrice",
+        head: "SellPrice",
+      }]}
+    />
   )
 }

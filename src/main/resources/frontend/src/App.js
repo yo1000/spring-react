@@ -1,25 +1,14 @@
 import React from "react";
 import {useAuth} from "react-oidc-context";
-import {css} from "@emotion/react";
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
 import {site} from "./site"
 import Home from "./pages/Home";
 import Items from "./pages/Items";
 import Weapons from "./pages/Weapons";
 import {Route, Routes} from "react-router-dom";
+import {style} from "./theme";
 
 export default function App() {
-  const style = css`
-    .userDisplayName {
-      margin-right: 1rem;
-    }
-    
-    .main {
-      margin-top: 6rem;
-      margin-bottom: 4rem;
-    }
-  `
-
   const auth = useAuth()
 
   return (

@@ -33,29 +33,38 @@ export default function Weapons() {
   }, [auth])
 
   return (
-    <DataTable data={weapons} keys={[
-      "id",
-      "name",
-      "price",
-      "str",
-      "hit",
-      "items.name",
-      "items.quantity",
-    ]} head={{
-      "id": "ID",
-      "name": "Name",
-      "price": "Price",
-      "str": "Str",
-      "hit": "Hit",
-      "items.name": "Remodel item",
-      "items.quantity": "Remodel qty",
-    }} editableKeys={[
-      "name",
-      "price",
-      "str",
-      "hit",
-      "items.name",
-      "items.quantity",
-    ]} />
+    <DataTable
+      id="dataTable"
+      data={weapons}
+      props={[{
+        name: "id",
+        head: "Name",
+      }, {
+        name: "name",
+        head: "Name",
+        editable: true,
+      }, {
+        name: "price",
+        head: "Price",
+        editable: true,
+      }, {
+        name: "str",
+        head: "Str",
+        editable: true,
+      }, {
+        name: "hit",
+        head: "Hit",
+        editable: true,
+      }, {
+        name: "items.name",
+        head: "Remodel item",
+        editable: true,
+      }, {
+        name: "items.quantity",
+        head: "Remodel qty",
+        editable: true,
+      }]}
+      autoSelect={true}
+    />
   )
 }

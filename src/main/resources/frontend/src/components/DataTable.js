@@ -1,10 +1,20 @@
 import {Table} from "react-bootstrap";
 import React from "react";
-import {css} from "@emotion/react";
+
+/**
+ * @typedef {object} Props
+ * @property {string} name
+ * @property {string?} head
+ * @property {boolean?} editable
+ * @property {number?} maxLength
+ * @property {Function?} onChange
+ */
 
 /**
  *
- * @param data Object Supported data formats are limited.
+ * @param {string} id
+ * @param {any[]} data  Supported data formats are limited.
+ *
  * Should match one of following formats.
  *
  *   Supported
@@ -47,211 +57,228 @@ import {css} from "@emotion/react";
  *   }]
  *   ```
  *
- * @param head Object
- * @param keys Array
- * @param editable boolean
- * @param combinationKey string
+ * @param {Props[]} props
+ * @param {string} combinationKey
+ * @param {boolean} autoSelect
  * @returns {JSX.Element}
  * @constructor
  */
 export default function DataTable({
-  data, head, keys, editableKeys = [], combinationKey = ""
+  id,
+  data,
+  props,
+  combinationKey = "",
+  autoSelect = false,
 }) {
-  const style = css`
-    .evenRow {
-      --bs-table-accent-bg: var(--bs-table-striped-bg);
-      color: var(--bs-table-striped-color);
-    }
-    .oddRow {
-    }
-    input[readonly] {
-      background-color: #e9ecef;;
-      border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
-      border-style: solid;
-      border-width: 1px;
-      border-radius: 2px;
-    }
-  `
-
   return (
-    <Table css={style}>
-      <thead>
-      <tr>
-        {keys && keys.length && keys.map(k => (
-          <th>{(head && head[k]) ? head[k] : k}</th>
-        ))}
-      </tr>
-      </thead>
-      <tbody>
-      <DataRows data={data} keys={keys} editableKeys={editableKeys} combinationKey={combinationKey} />
-      </tbody>
-    </Table>
+    <div id={id}>
+      <Table size="sm">
+        <thead>
+        <tr>
+          {props.map(prop => (<th>{prop.head}</th>))}
+        </tr>
+        </thead>
+        <tbody>
+        <DataRows
+          data={data}
+          props={props}
+          combinationKey={combinationKey}
+          autoSelect={autoSelect}
+        />
+        </tbody>
+      </Table>
+    </div>
   )
 }
 
-/**
- *
- * @param data Object
- * @param keys Array
- * @param editable boolean
- * @param combinationKey string
- * @returns {*}
- * @constructor
- */
 function DataRows({
-  data, keys, editableKeys = [], combinationKey
+  data,
+  props,
+  combinationKey = "",
+  autoSelect = false,
 }) {
-  const listKey = keys
-    .filter(k => k.indexOf(".") >= 0)
-    .map(k => k.match(/([^\.]+)\..+/))
+  const propNames = props && props.length ? props.map(p => p.name) : []
+  const listName = propNames.filter(n => n.indexOf(".") > 0)
+    .map(n => n.match(/([^\.]+)\..+/))
     .filter(matched => matched && matched.length >= 1)
     .map(matched => matched[1])[0]
 
-  return data && data.length && data.map((d, rowIndex) => (
-    d[listKey] && d[listKey].length ? [...Array(d[listKey].length).keys()].map(rowSubIndex => {
-      const newKeys = []
-      const datum = {}
-      if (rowSubIndex === 0) {
-        for (const key of keys) {
-          const k = key.startsWith(`${listKey}.`)
-            ? key.substring(`${listKey}.`.length)
-            : key
-          console.log(k)
-          newKeys[newKeys.length++] = key
-          datum[key] = key.startsWith(`${listKey}.`) ? d[listKey][rowSubIndex][k] : d[k]
-        }
-      } else {
-        for (const key of keys) {
-          if (!key.startsWith(`${listKey}.`)) continue
-          newKeys[newKeys.length++] = key
-          datum[key] = d[listKey][rowSubIndex][key.substring(`${listKey}.`.length)]
-        }
-      }
+  if (!data || !data.length) return <></>
 
-      return <DataRow
-        datum={datum}
-        keys={newKeys}
-        keysAll={keys}
-        listKeyPrefix={listKey}
-        rowMax={data.length}
-        rowIndex={rowIndex}
-        rowSubIndex={rowSubIndex}
-        rowSpan={rowSubIndex === 0 ? d[listKey].length : 0}
-        editableKeys={editableKeys}
-        combinationKey={combinationKey}
-      />
-    }) : (
-      <DataRow
+  return data.map((d, rowIndex) => (
+    d[listName] && d[listName].length
+      ? [...Array(d[listName].length).keys()].map(rowSubIndex => {
+        const datum = {}
+        for (const propName of propNames) {
+          if (propName.startsWith(`${listName}.`)) {
+            const elmName = propName.substring(`${listName}.`.length)
+            datum[propName] = d[listName][rowSubIndex][elmName]
+          } else {
+            datum[propName] = d[propName]
+          }
+        }
+        return <DataRow
+          datum={datum}
+          props={props}
+          listName={listName}
+          rowMax={data.length}
+          rowIndex={rowIndex}
+          rowSubIndex={rowSubIndex}
+          rowSpan={rowSubIndex === 0 ? d[listName].length : 0}
+          combinationKey={combinationKey}
+          autoSelect={autoSelect}
+        />
+      })
+      : <DataRow
         datum={d}
-        keys={keys}
-        keysAll={keys}
+        props={props}
         rowMax={data.length}
         rowIndex={rowIndex}
         rowSubIndex={0}
-        editableKeys={editableKeys}
         combinationKey={combinationKey}
+        autoSelect={autoSelect}
       />
-    )
   ))
 }
 
-/**
- *
- * @param datum Object
- * @param rowMax number
- * @param rowIndex number
- * @param rowSubIndex number
- * @param keys Array
- * @param keysAll Array
- * @param listKeyPrefix string
- * @param rowSpan number
- * @param editable boolean
- * @param combinationKey string
- * @returns {JSX.Element}
- * @constructor
- */
 function DataRow({
   datum,
-  rowMax, rowIndex, rowSubIndex, rowSpan,
-  keys, keysAll, listKeyPrefix,
-  editableKeys = [], combinationKey = ""
+  props,
+  rowMax,
+  rowIndex,
+  rowSubIndex,
+  rowSpan,
+  listName,
+  combinationKey = "",
+  autoSelect = false,
 }) {
-  const keyIndexes = {}
-  for (let i = 0; i < keysAll.length; i++) {
-    keyIndexes[keysAll[i]] = i
+  const editable = props.some(p => p.editable)
+
+  const nameIndexes = {}
+  const shownPropNames = props.map(p => p.name)
+  for (let i = 0; i < shownPropNames.length; i++) {
+    nameIndexes[shownPropNames[i]] = i
   }
 
   return (
-    <tr>
-      {keys && keys.length && keys.map((key) => {
-        return (
-          <td
+    <tr data-modified={false}>
+      {
+        props.map((prop, index) => {
+          if (rowSubIndex > 0 && (!prop.name.startsWith(`${listName}.`))) return
+
+          return <td
             className={rowIndex % 2 == 0 ? "evenRow" : "oddRow"}
-            rowSpan={(!key.startsWith(`${listKeyPrefix}.`)) ? rowSpan : null}
+            rowSpan={(!prop.name.startsWith(`${listName}.`)) ? rowSpan : null}
             data-row={rowIndex}
             data-row-sub={rowSubIndex}
-            data-col={keyIndexes[key]}
-          >
-            {editableKeys ? <input defaultValue={editableKeys.includes(key) ? datum[key] : null} value={!editableKeys.includes(key) ? datum[key] : null} readOnly={!editableKeys.includes(key)} onKeyDown={(event) => {
-              const pos = event.target.closest("td").dataset
-              const r = pos.row * 1 || 0
-              const rs = pos.rowSub * 1 || 0
-              const c = pos.col * 1 || 0
+            data-col={nameIndexes[prop.name]}
+          >{
+            (index === 0) ? Object.keys(datum)
+              .filter(datumKey => props.every(p => datumKey !== p.name))
+              .map(datumKey =>
+                <input type="hidden" name={datumKey} value={datum[datumKey]}/>
+              ) : <></>
+          }{
+            editable
+              ? <input
+                data-focusable={true}
+                name={prop.name}
+                defaultValue={prop.editable ? datum[prop.name] : null}
+                value={!prop.editable ? datum[prop.name] : null}
+                readOnly={!prop.editable}
+                maxLength={prop.maxLength ? prop.maxLength : null}
+                onKeyDown={(event) => {
+                  const pos = event.target.closest("td").dataset
+                  const r = pos.row * 1 || 0
+                  const rs = pos.rowSub * 1 || 0
+                  const c = pos.col * 1 || 0
 
-              const firstRowSpan = document
-                .querySelector(`[data-row="${r}"][data-row-sub="0"][rowspan]`)
-                ?.getAttribute("rowspan") ?? 0
+                  const firstRowSpan = document
+                    .querySelector(`[data-row="${r}"][data-row-sub="0"][rowspan]`)
+                    ?.getAttribute("rowspan") ?? 0
 
-              switch (combinationKey.toLowerCase()) {
-                case 'alt':
-                  if (!event.altKey) return
-                  break;
-                case 'ctrl':
-                  if (!event.ctrlKey) return
-                  break;
-                case 'shift':
-                  if (!event.shiftKey) return
-                  break;
-                default:
-                  break;
-              }
-
-              switch (event.key) {
-                case 'ArrowUp':
-                  if (r > 0 || rs > 0) {
-                    let input = document.querySelector(`[data-row="${r}"][data-row-sub="${rs - 1}"][data-col="${c}"] input`)
-
-                    if (!input) {
-                      const inputChoices = document.querySelectorAll(`[data-row="${r - 1}"][data-col="${c}"] input`)
-                      input = inputChoices[inputChoices.length - 1]
-                    }
-
-                    input.focus()
+                  switch (combinationKey.toLowerCase()) {
+                    case 'alt':
+                      if (!event.altKey) return
+                      break;
+                    case 'ctrl':
+                    case 'control':
+                      if (!event.ctrlKey) return
+                      break;
+                    case 'shift':
+                      if (!event.shiftKey) return
+                      break;
+                    default:
+                      break;
                   }
-                  break;
-                case 'ArrowRight':
-                  if (c < keysAll.length - 1) {
-                    document.querySelector(`[data-row="${r}"][data-row-sub="${rs}"][data-col="${c + 1}"] input`).focus()
-                  }
-                  break;
-                case 'ArrowDown':
-                  if (r < rowMax - 1 || rs < firstRowSpan - 1) {
-                    const input = document.querySelector(`[data-row="${r}"][data-row-sub="${rs + 1}"][data-col="${c}"] input`)
-                      ?? document.querySelector(`[data-row="${r + 1}"][data-row-sub="0"][data-col="${c}"] input`)
 
-                    input.focus()
+                  switch (event.key) {
+                    case 'ArrowUp':
+                      if (r > 0 || rs > 0) {
+                        let input = document.querySelector(`[data-row="${r}"][data-row-sub="${rs - 1}"][data-col="${c}"] input[data-focusable]`)
+                        if (!input) {
+                          const inputChoices = document.querySelectorAll(`[data-row="${r - 1}"][data-col="${c}"] input[data-focusable]`)
+                          input = inputChoices[inputChoices.length - 1]
+                        }
+                        input.focus()
+                      }
+                      break;
+                    case 'ArrowRight':
+                      if (c < props.length - 1) {
+                        const input = document.querySelector(`[data-row="${r}"][data-row-sub="${rs}"][data-col="${c + 1}"] input[data-focusable]`)
+                        input.focus()
+                      }
+                      break;
+                    case 'ArrowDown':
+                      if (r < rowMax - 1 || rs < firstRowSpan - 1) {
+                        const input = document.querySelector(`[data-row="${r}"][data-row-sub="${rs + 1}"][data-col="${c}"] input[data-focusable]`)
+                          ?? document.querySelector(`[data-row="${r + 1}"][data-row-sub="0"][data-col="${c}"] input[data-focusable]`)
+                        if (input) input.focus()
+                      }
+                      break;
+                    case 'ArrowLeft':
+                      if (c > nameIndexes[props[0].name]) {
+                        const input = document.querySelector(`[data-row="${r}"][data-row-sub="${rs}"][data-col="${c - 1}"] input[data-focusable]`)
+                        if (input) input.focus()
+                      }
+                      break;
                   }
-                  break;
-                case 'ArrowLeft':
-                  if (c > keyIndexes[keys[0]]) {
-                    document.querySelector(`[data-row="${r}"][data-row-sub="${rs}"][data-col="${c - 1}"] input`).focus()
+                }}
+                onKeyUp={(event) => {
+                  if (!autoSelect) return
+
+                  switch (combinationKey.toLowerCase()) {
+                    case 'alt':
+                      if (!event.altKey) return
+                      break;
+                    case 'ctrl':
+                    case 'control':
+                      if (!event.ctrlKey) return
+                      break;
+                    case 'shift':
+                      if (!event.shiftKey) return
+                      break;
+                    default:
+                      break;
                   }
-                  break;
-              }
-            }}/> : datum[key]}
-          </td>
-        )
-      })}
+
+                  switch (event.key) {
+                    case 'ArrowUp':
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                    case 'ArrowLeft':
+                      event.target.select()
+                  }
+                }}
+                onChange={(event) => {
+                  event.target.closest("tr").dataset.modified = "true"
+                  prop.onChange && prop.onChange(event)
+                }}
+              />
+              : datum[prop.name]
+          }</td>
+        })
+      }
     </tr>
   )
 }

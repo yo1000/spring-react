@@ -20,6 +20,9 @@ export default function Weapons() {
     .then(resp => resp.json())
     .then(data => data.map(d => ({
       "id": d.weapon.id,
+      "code": (typeof d.weapon.id === "number"
+        ? d.weapon.id.toString(16).toUpperCase().padStart(2, "0")
+        : d.weapon.id),
       "name": d.weapon.name,
       "price": d.weapon.price,
       "str": d.weapon.str,
@@ -39,6 +42,9 @@ export default function Weapons() {
       props={[{
         name: "id",
         head: "Name",
+      }, {
+        name: "code",
+        head: "Code",
       }, {
         name: "name",
         head: "Name",

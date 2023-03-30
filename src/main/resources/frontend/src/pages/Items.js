@@ -18,7 +18,12 @@ export default function Items() {
       },
     })
     .then(resp => resp.json())
-    .then(data => setItems(data))
+    .then(data => setItems(data.map(d => ({
+      ...d,
+      "code": (typeof d.id === "number"
+        ? d.id.toString(16).toUpperCase().padStart(2, "0")
+        : d.id),
+    }))))
   }, [auth])
 
   return (
@@ -28,6 +33,9 @@ export default function Items() {
       props={[{
         name: "id",
         head: "ID",
+      }, {
+        name: "code",
+        head: "Code",
       }, {
         name: "name",
         head: "Name",

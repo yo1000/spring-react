@@ -224,8 +224,8 @@ function DataRow({
                 <input type="hidden" name={datumKey} value={datum[datumKey]}/>
               ) : <></>
           }{
-            editable
-              ? <input
+            editable ? (
+              <input
                 data-focusable={true}
                 name={prop.name}
                 defaultValue={prop.editable ? (
@@ -337,6 +337,12 @@ function DataRow({
                     col: cellElm.dataset.col * 1,
                   })
                 }}
+                onFocus={async (event) => {
+                  const {value} = event.target
+                  if (prop.editable && prop.digitGrouping && value && value.match(/[^0-9]+/ig)) {
+                    event.target.value = value.replaceAll(/[^0-9]+/ig, "")
+                  }
+                }}
                 onBlur={async (event) => {
                   const {value} = event.target
                   if (prop.editable && prop.digitGrouping && value && value.match(/^\d+$/)) {
@@ -344,11 +350,11 @@ function DataRow({
                   }
                 }}
               />
-              : (
-                prop.digitGrouping && typeof datum[prop.name] === "number"
-                  ? datum[prop.name].toLocaleString()
-                  : datum[prop.name]
-              )
+            ) : (
+              prop.digitGrouping && typeof datum[prop.name] === "number"
+                ? datum[prop.name].toLocaleString()
+                : datum[prop.name]
+            )
           }</td>
         })
       }

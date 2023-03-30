@@ -11,18 +11,28 @@ export const style = css`
   }
 
   #dataTable {
-    .evenRow {
-      --bs-table-accent-bg: var(--bs-table-striped-bg);
-      color: var(--bs-table-striped-color);
-    }
-    .oddRow {
-    }
-    input[readonly] {
-      background-color: #e9ecef;;
-      border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
-      border-style: solid;
-      border-width: 1px;
-      border-radius: 2px;
+    .dataTableBody {
+      max-height: calc(100vh - 240px);
+      height: calc(100vh - 240px);
+
+      .evenRow {
+        --bs-table-accent-bg: var(--bs-table-striped-bg);
+        color: var(--bs-table-striped-color);
+      }
+      .oddRow {
+      }
+      input {
+        width: 100%;
+        font-family: monospace;
+
+        &[readonly] {
+          background-color: #e9ecef;;
+          border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+          border-style: solid;
+          border-width: 1px;
+          border-radius: 2px;
+        }
+      }
     }
   }
 `

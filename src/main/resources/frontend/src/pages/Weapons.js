@@ -47,14 +47,17 @@ export default function Weapons() {
         name: "price",
         head: "Price",
         editable: true,
+        digitGrouping: true,
       }, {
         name: "str",
         head: "Str",
         editable: true,
+        digitGrouping: true,
       }, {
         name: "hit",
         head: "Hit",
         editable: true,
+        digitGrouping: true,
       }, {
         name: "items.name",
         head: "Remodel item",
@@ -63,6 +66,7 @@ export default function Weapons() {
         name: "items.quantity",
         head: "Remodel qty",
         editable: true,
+        digitGrouping: true,
       }]}
       autoSelect={true}
     />

@@ -34,9 +34,11 @@ export default function Items() {
       }, {
         name: "price",
         head: "Price",
+        digitGrouping: true,
       }, {
         name: "sellPrice",
         head: "SellPrice",
+        digitGrouping: true,
       }]}
     />
   )

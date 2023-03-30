@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/weapons/**").hasAnyAuthority("test")
                         .anyRequest().permitAll())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .csrf().disable()
                 .cors();
 
         return httpSecurity.build();

@@ -33,11 +33,11 @@ public class JdbcWeaponRemodelRepository implements WeaponRemodelRepository {
                     item.price AS item_price,
                     item.sell_price AS item_sell_price
                 FROM
-                    weapon_remodel
-                INNER JOIN
                     weapon
-                    ON weapon_remodel.weapon_id = weapon.id
-                INNER JOIN
+                LEFT OUTER JOIN
+                    weapon_remodel
+                    ON weapon.id = weapon_remodel.weapon_id
+                LEFT OUTER JOIN
                     item
                     ON weapon_remodel.item_id = item.id
                 ORDER BY
@@ -88,11 +88,11 @@ public class JdbcWeaponRemodelRepository implements WeaponRemodelRepository {
                     item.price AS item_price,
                     item.sell_price AS item_sell_price
                 FROM
-                    weapon_remodel
-                INNER JOIN
                     weapon
-                    ON weapon_remodel.weapon_id = weapon.id
-                INNER JOIN
+                LEFT OUTER JOIN
+                    weapon_remodel
+                    ON weapon.id = weapon_remodel.weapon_id
+                LEFT OUTER JOIN
                     item
                     ON weapon_remodel.item_id = item.id
                 WHERE
@@ -146,11 +146,11 @@ public class JdbcWeaponRemodelRepository implements WeaponRemodelRepository {
                     item.price AS item_price,
                     item.sell_price AS item_sell_price
                 FROM
-                    weapon_remodel
-                INNER JOIN
                     weapon
-                    ON weapon_remodel.weapon_id = weapon.id
-                INNER JOIN
+                LEFT OUTER JOIN
+                    weapon_remodel
+                    ON weapon.id = weapon_remodel.weapon_id
+                LEFT OUTER JOIN
                     item
                     ON weapon_remodel.item_id = item.id
                 WHERE

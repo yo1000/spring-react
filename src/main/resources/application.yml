@@ -16,3 +16,33 @@ server:
   error:
     whitelabel:
       enabled: false
+
+# app:
+#   security:
+#     requests:
+#       - uri: {URI that must be protected}
+#         methods:
+#           (None: Default, Same as when setting all methods.)
+#           - GET
+#           - POST
+#           - PUT
+#           - PATCH
+#           - DELETE
+#           - OPTIONS
+#         authorities:
+#           (None: Default, Same as when only authenticated.)
+#           - authorityName1
+#           - authorityName2
+#           - ...
+#     cors:
+#       allowed-origins:
+#         (None: Default, Cross-origin requests are not allowed.)
+#         - https:// ...
+#         - http:// ...
+app:
+  security:
+    requests:
+      - uri: /api/items/**
+      - uri: /api/weapons/**
+        authorities:
+          - admin

@@ -12,6 +12,11 @@ module.exports = {
     path: path.join(__dirname, '../public'),
     filename: 'index.js'
   },
+  resolve: {
+    fallback: {
+      'process/browser': require.resolve('process/browser'),
+    }
+  },
   module: {
     rules: [{
       test: /\.jsx?$/,

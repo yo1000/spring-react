@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useAuth} from "react-oidc-context";
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
 import {site} from "./site"
@@ -7,9 +7,28 @@ import Items from "./pages/Items";
 import Weapons from "./pages/Weapons";
 import {Route, Routes} from "react-router-dom";
 import {style} from "./theme";
+import {minimatch} from "minimatch";
 
 export default function App() {
+  const apiBaseUri = process.env.API_BASE_URI || ''
+
   const auth = useAuth()
+  const [authorities, setAuthorities] = useState([])
+
+  useEffect(() => {
+    fetch(`${apiBaseUri}/api/authorities`, {
+      headers: {
+        Authorization: `Bearer ${auth.user?.access_token}`,
+      },
+    })
+    .then(resp => resp.json())
+    .then(data => setAuthorities(data))
+  }, [auth])
+
+  const matchPath = (pattern, path) => {
+    const normalized = pattern.match(/\/[*]+$/) ? `${path}/` : path
+    return minimatch(normalized, pattern)
+  }
 
   return (
     <div css={style}>
@@ -20,8 +39,16 @@ export default function App() {
           <Navbar.Collapse>
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/items">Items</Nav.Link>
-              <Nav.Link href="/weapons">Weapons</Nav.Link>
+              {
+                authorities.filter(a => a.authorized).some(a => matchPath(a.uri, "/api/items"))
+                  ? <Nav.Link href="/items">Items</Nav.Link>
+                  : <></>
+              }
+              {
+                authorities.filter(a => a.authorized).some(a => matchPath(a.uri, "/api/weapons"))
+                  ? <Nav.Link href="/weapons">Weapons</Nav.Link>
+                  : <></>
+              }
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">

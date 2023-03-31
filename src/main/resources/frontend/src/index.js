@@ -17,7 +17,7 @@ function format(template, params) {
   )(...Object.values(params).map(p => p ?? ''))
 }
 
-fetch('/config')
+fetch('/api/config')
   .then(resp => {
     if (!resp.ok) throw new Error(resp.statusText)
 

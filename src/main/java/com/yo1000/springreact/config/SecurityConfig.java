@@ -1,34 +1,38 @@
 package com.yo1000.springreact.config;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties({
+        SecurityConfig.SecurityProperties.class
+})
 public class SecurityConfig {
-    private WebConfig.WebConfigurationProperties props;
+    private SecurityProperties props;
 
-    public SecurityConfig(WebConfig.WebConfigurationProperties props) {
+    public SecurityConfig(SecurityProperties props) {
         this.props = props;
     }
 
@@ -37,10 +41,32 @@ public class SecurityConfig {
             HttpSecurity httpSecurity
     ) throws Exception {
         httpSecurity
-                .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/api/items/**").authenticated()
-                        .requestMatchers("/api/weapons/**").hasAnyAuthority("admin")
-                        .anyRequest().permitAll())
+                .authorizeHttpRequests(registry -> {
+                    Optional.ofNullable(props.requests).orElse(Collections.emptyList()).forEach(request -> {
+                        List<HttpMethod> methods = Optional.ofNullable(request.methods)
+                                .orElse(Collections.emptyList()).stream()
+                                .map(m -> HttpMethod.valueOf(m.toUpperCase()))
+                                .toList();
+
+                        final List<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl> authorizedUrls;
+                        if (methods.isEmpty()) {
+                            authorizedUrls = Collections.singletonList(registry.requestMatchers(request.uri));
+                        } else {
+                            authorizedUrls = methods.stream().map(m -> registry.requestMatchers(m, request.uri)).toList();
+                        }
+
+                        final List<String> authorities = Optional.ofNullable(request.authorities)
+                                .orElse(Collections.emptyList());
+                        authorizedUrls.forEach(authorizedUrl -> {
+                            if (authorities.isEmpty()) {
+                                authorizedUrl.authenticated();
+                            } else {
+                                authorizedUrl.hasAnyAuthority(authorities.toArray(new String[0]));
+                            }
+                        });
+                    });
+                    registry.anyRequest().permitAll();
+                })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .csrf().disable()
                 .cors();
@@ -51,7 +77,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(props.allowedOrigins());
+        configuration.setAllowedOrigins(props.cors().allowedOrigins());
         configuration.setAllowedMethods(List.of(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
@@ -91,5 +117,21 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(converter);
         return jwtAuthenticationConverter;
+    }
+
+    @ConfigurationProperties(prefix = "app.security")
+    public record SecurityProperties(
+            List<Request> requests,
+            Cors cors
+    ) {
+        public record Request(
+                String uri,
+                List<String> methods,
+                List<String> authorities
+        ) {}
+
+        public record Cors(
+                List<String> allowedOrigins
+        ) {}
     }
 }

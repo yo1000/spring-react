@@ -83,7 +83,7 @@ curl -s \
   -H "Authorization: bearer ${KC_ACCESS_TOKEN}" \
   -d "{
     \"username\": \"squall\",
-    \"email\": \"squall@localhost\",
+    \"email\": \"squall@seed.localhost\",
     \"emailVerified\": true,
     \"firstName\": \"Squall\",
     \"lastName\": \"Leonhart\",
@@ -96,13 +96,36 @@ curl -s \
   }" \
   "${KEYCLOAK_URL_BASE}/admin/realms/${KEYCLOAK_REALM}/users" \
 
+KC_USER_ID=$(curl -s \
+  -X GET \
+  -H "Content-Type: application/json" \
+  -H "Authorization: bearer ${KC_ACCESS_TOKEN}" \
+  "${KEYCLOAK_URL_BASE}/admin/realms/${KEYCLOAK_REALM}/users?exact=true&username=squall" \
+  | jq -r '.[0].id' \
+)
+
+KC_ADMIN_ROLE_JSON=$(curl -s \
+  -X GET \
+  -H "Content-Type: application/json" \
+  -H "Authorization: bearer ${KC_ACCESS_TOKEN}" \
+  "${KEYCLOAK_URL_BASE}/admin/realms/${KEYCLOAK_REALM}/users/${KC_USER_ID}/role-mappings/realm/available?first=0&max=11" \
+  | jq -r '.[] | select(.name == "admin")' \
+)
+
+curl -s \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: bearer ${KC_ACCESS_TOKEN}" \
+  -d "[${KC_ADMIN_ROLE_JSON}]" \
+  "${KEYCLOAK_URL_BASE}/admin/realms/${KEYCLOAK_REALM}/users/${KC_USER_ID}/role-mappings/realm" \
+
 curl -s \
   -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: bearer ${KC_ACCESS_TOKEN}" \
   -d "{
     \"username\": \"rinoa\",
-    \"email\": \"rinoa@localhost\",
+    \"email\": \"rinoa@forest-owls.localhost\",
     \"emailVerified\": true,
     \"firstName\": \"Rinoa\",
     \"lastName\": \"Heartilly\",
@@ -121,7 +144,7 @@ curl -s \
   -H "Authorization: bearer ${KC_ACCESS_TOKEN}" \
   -d "{
     \"username\": \"seifer\",
-    \"email\": \"seifer@localhost\",
+    \"email\": \"seifer@seed.localhost\",
     \"emailVerified\": true,
     \"firstName\": \"Seifer\",
     \"lastName\": \"Almasy\",
@@ -136,11 +159,11 @@ curl -s \
 
 echo "User created
 
-| Username | Email            | Password    |
-|----------|------------------|-------------|
-| squall   | squall@localhost | squall-1234 |
-| rinoa    | rinoa@localhost  | rinoa-1234  |
-| seifer   | seifer@localhost | seifer-1234 |
+| Username | Password    | Role  | Email                       |
+|----------|-------------|-------|-----------------------------|
+| squall   | squall-1234 | admin | squall@seed.localhost       |
+| rinoa    | rinoa-1234  |       | rinoa@forest-owls.localhost |
+| seifer   | seifer-1234 |       | seifer@seed.localhost       |
 "
 
 while :; do sleep 10; done

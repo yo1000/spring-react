@@ -39,7 +39,7 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/api/items/**").authenticated()
-                        .requestMatchers("/api/weapons/**").hasAnyAuthority("test")
+                        .requestMatchers("/api/weapons/**").hasAnyAuthority("admin")
                         .anyRequest().permitAll())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .csrf().disable()

@@ -128,10 +128,11 @@ function DataRows({
   autoWidth,
 }) {
   const propNames = props && props.length ? props.map(p => p.name) : []
-  const listName = propNames.filter(n => n.indexOf(".") > 0)
-    .map(n => n.match(/([^\.]+)\..+/))
-    .filter(matched => matched && matched.length >= 1)
-    .map(matched => matched[1])[0]
+  const listName = propNames
+    .filter(name => !name.startsWith(".") && !name.endsWith("."))
+    .map(name => name.split("."))
+    .filter(nameParts => nameParts.length === 2)
+    .map(nameParts => nameParts[0])[0]
 
   if (!data || !data.length) return <></>
 

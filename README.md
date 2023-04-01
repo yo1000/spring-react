@@ -13,7 +13,7 @@ docker compose up
 -Dspring.jpa.show-sql=true
 -Dspring.h2.console.enabled=true
 -Dserver.error.whitelabel.enabled=true
--Dapp.web.allowed-origins=http://localhost:3000
+-Dapp.security.cors.allowed-origins=http://localhost:3000
 -Dapp.frontend.oidc.authority=http://localhost:8000
 -Dapp.frontend.oidc.redirectUri=http://localhost:8080
 -Dapp.frontend.oidc.clientId=spring-react

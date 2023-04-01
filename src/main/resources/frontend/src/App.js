@@ -8,21 +8,18 @@ import Weapons from "./pages/Weapons";
 import {Route, Routes} from "react-router-dom";
 import {style} from "./theme";
 import {minimatch} from "minimatch";
+import AuthoritiesClient from "./clients/AuthoritiesClient";
 
 export default function App() {
-  const apiBaseUri = process.env.API_BASE_URI || ''
-
   const auth = useAuth()
   const [authorities, setAuthorities] = useState([])
 
+  const authoritiesClient = new AuthoritiesClient(auth)
+
   useEffect(() => {
-    fetch(`${apiBaseUri}/api/authorities`, {
-      headers: {
-        Authorization: `Bearer ${auth.user?.access_token}`,
-      },
-    })
-    .then(resp => resp.json())
-    .then(data => setAuthorities(data))
+    authoritiesClient
+      .get()
+      .then(data => setAuthorities(data))
   }, [auth])
 
   const matchPath = (pattern, path) => {

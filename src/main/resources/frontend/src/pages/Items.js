@@ -33,15 +33,19 @@ export default function Items() {
       }, {
         name: "name",
         head: "Name",
+        editable: true,
       }, {
         name: "price",
         head: "Price",
         digitGrouping: true,
+        editable: true,
       }, {
         name: "sellPrice",
         head: "SellPrice",
         digitGrouping: true,
+        editable: true,
       }]}
+      autoSelect={true}
     />
   )
 }

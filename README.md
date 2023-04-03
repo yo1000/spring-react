@@ -10,8 +10,6 @@ docker compose up
 
 ```shell
 ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments='
--Dspring.jpa.show-sql=true
--Dspring.h2.console.enabled=true
 -Dserver.error.whitelabel.enabled=true
 -Dapp.security.cors.allowed-origins=http://localhost:3000
 -Dapp.frontend.oidc.authority=http://localhost:8000

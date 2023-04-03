@@ -9,6 +9,7 @@ import {Route, Routes} from "react-router-dom";
 import {style} from "./theme";
 import {minimatch} from "minimatch";
 import AuthoritiesClient from "./clients/AuthoritiesClient";
+import Cards from "./pages/Cards";
 
 export default function App() {
   const auth = useAuth()
@@ -46,6 +47,11 @@ export default function App() {
                   ? <Nav.Link href="/weapons">Weapons</Nav.Link>
                   : <></>
               }
+              {
+                authorities.filter(a => a.authorized).some(a => matchPath(a.uri, "/api/cards"))
+                  ? <Nav.Link href="/cards">Cards</Nav.Link>
+                  : <></>
+              }
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
@@ -78,6 +84,7 @@ export default function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/items" element={<Items/>} />
           <Route path="/weapons" element={<Weapons/>} />
+          <Route path="/cards" element={<Cards/>} />
         </Routes>
       </Container>
     </div>

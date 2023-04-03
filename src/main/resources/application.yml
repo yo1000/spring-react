@@ -3,7 +3,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    url: 'jdbc:h2:mem:ff8;TRUNCATE_LARGE_LENGTH=TRUE'
+    url: 'jdbc:h2:mem:ff8;TRUNCATE_LARGE_LENGTH=TRUE;DATABASE_TO_UPPER=FALSE'
     hikari:
       auto-commit: false
   security:
@@ -46,3 +46,4 @@ app:
       - uri: /api/weapons/**
         authorities:
           - admin
+      - uri: /api/cards/**

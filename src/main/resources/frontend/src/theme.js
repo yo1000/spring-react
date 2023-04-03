@@ -11,6 +11,28 @@ export const style = css`
   }
 
   #dataTable {
+    overflow-x: scroll;
+    
+    .digitGrouping,
+    .digitGrouping input {
+      text-align: right;
+    }
+    
+    th,
+    td {
+      border-right: 1px solid var(--bs-border-color);
+    }
+
+    .dataTableHead,
+    .dataTableBody {
+      width: fit-content;
+      min-width: 100%;
+
+      .table {
+        margin: 0;
+      }
+    }
+    
     .dataTableBody {
       max-height: calc(100vh - 240px);
       height: calc(100vh - 240px);
@@ -21,6 +43,7 @@ export const style = css`
       }
       .oddRow {
       }
+      
       input {
         width: 100%;
         font-family: monospace;

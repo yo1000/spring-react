@@ -92,7 +92,7 @@ export default function DataTable({
                 width: prop.columnWidth,
                 minWidth: prop.columnWidth,
                 maxWidth: prop.columnWidth,
-              }}>
+              }} className={prop.digitGrouping ? "digitGrouping" : null}>
                 {prop.head}
               </th>
             ))}

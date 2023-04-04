@@ -1,5 +1,6 @@
 import {Table} from "react-bootstrap"
 import React from "react"
+import {css} from "@emotion/react";
 
 /**
  * @typedef {object} Props
@@ -72,14 +73,67 @@ export default function DataTable({
   combinationKey = "",
   autoSelect = false,
 }) {
+  const style = css`
+    &.dataTable {
+      overflow-x: scroll;
+      overflow-y: hidden;
+
+      .digitGrouping,
+      .digitGrouping input {
+        text-align: right;
+      }
+
+      .dataTableHead,
+      .dataTableBody {
+        width: fit-content;
+        min-width: 100%;
+
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+        .table {
+          margin: 0;
+
+          th,
+          td {
+            border-right: 1px solid var(--bs-border-color);
+          }
+        }
+      }
+
+      .dataTableBody {
+        // Optional
+        // max-height: calc(100vh - 240px);
+        // height: calc(100vh - 240px);
+
+        .evenRow {
+          --bs-table-accent-bg: var(--bs-table-striped-bg);
+        }
+        .oddRow {
+          // Optional
+        }
+
+        input {
+          width: 100%;
+          font-family: monospace;
+
+          &[readonly] {
+            background-color: #e9ecef;;
+            border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 2px;
+          }
+        }
+      }
+    }
+  `
+
   const autoWidth = props.some(p => !p.columnWidth) && `${100 / props.length}%`
 
   return (
-    <div id={id}>
-      <div className="dataTableHead" style={{
-        overflowX: "hidden",
-        overflowY: "scroll",
-      }}>
+    <div id={id} className="dataTable" css={style}>
+      <div className="dataTableHead">
         <Table size="sm">
           <thead>
           <tr>
@@ -100,10 +154,7 @@ export default function DataTable({
           </thead>
         </Table>
       </div>
-      <div className="dataTableBody" style={{
-        overflowX: "hidden",
-        overflowY: "scroll",
-      }}>
+      <div className="dataTableBody">
         <Table size="sm">
           <tbody>
           <DataRows

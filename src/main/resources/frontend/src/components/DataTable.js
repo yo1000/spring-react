@@ -90,6 +90,10 @@ export default function DataTable({
 
         overflow-x: hidden;
         overflow-y: scroll;
+        
+        &.dataEmpty {
+          overflow-y: auto;
+        }
 
         .table {
           margin: 0;
@@ -133,7 +137,10 @@ export default function DataTable({
 
   return (
     <div id={id} className="dataTable" css={style}>
-      <div className="dataTableHead">
+      <div className={(
+        " dataTableHead " +
+        (!data || !data.length ? " dataEmpty " : "")
+      ).trim()}>
         <Table size="sm">
           <thead>
           <tr>
@@ -154,7 +161,10 @@ export default function DataTable({
           </thead>
         </Table>
       </div>
-      <div className="dataTableBody">
+      <div className={(
+        " dataTableBody " +
+        (!data || !data.length ? " dataEmpty " : "")
+      ).trim()}>
         <Table size="sm">
           <tbody>
           <DataRows

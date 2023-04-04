@@ -10,6 +10,7 @@ import {style} from "./theme";
 import {minimatch} from "minimatch";
 import AuthoritiesClient from "./clients/AuthoritiesClient";
 import Cards from "./pages/Cards";
+import Empty from "./pages/Empty";
 
 export default function App() {
   const auth = useAuth()
@@ -52,6 +53,7 @@ export default function App() {
                   ? <Nav.Link href="/cards">Cards</Nav.Link>
                   : <></>
               }
+              <Nav.Link href="/empty">Empty</Nav.Link>
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
@@ -85,6 +87,7 @@ export default function App() {
           <Route path="/items" element={<Items/>} />
           <Route path="/weapons" element={<Weapons/>} />
           <Route path="/cards" element={<Cards/>} />
+          <Route path="/empty" element={<Empty/>} />
         </Routes>
       </Container>
     </div>

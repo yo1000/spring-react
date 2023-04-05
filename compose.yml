@@ -27,5 +27,5 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
     volumes:
       - ./keycloak-setup.sh:/tmp/keycloak-setup.sh
-      - ./src/main/resources/frontend/.env.development:/tmp/.env
+      - ./src/main/resources/frontend/.env.dev.keycloak:/tmp/.env
     entrypoint: /bin/sh -c "/tmp/keycloak-setup.sh"

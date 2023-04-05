@@ -10,7 +10,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8000/realms/master
+          # Keycloak
+          #issuer-uri: http://localhost:8000/realms/master
+          # Cognito
+          #issuer-uri: https://cognito-idp.ap-northeast-1.amazonaws.com/{{cognito-user-pool-id}}
 
 server:
   error:

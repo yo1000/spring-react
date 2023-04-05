@@ -1,5 +1,6 @@
 package com.yo1000.springreact.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -95,8 +95,9 @@ public class SecurityConfig {
     }
 
     // for Keycloak
+    @ConditionalOnProperty(name = "app.security.idp", havingValue = "keycloak")
     @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    public JwtAuthenticationConverter keycloakJwtAuthenticationConverter() {
         Converter<Jwt, Collection<GrantedAuthority>> converter = source -> {
             Map<String, Object> realmAccess = source.getClaimAsMap("realm_access");
             List<String> realmRoles = (List<String>) realmAccess.get("roles");
@@ -119,8 +120,28 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
+    // for Cognito
+    @ConditionalOnProperty(name = "app.security.idp", havingValue = "cognito")
+    @Bean
+    public JwtAuthenticationConverter cognitoJwtAuthenticationConverter() {
+        Converter<Jwt, Collection<GrantedAuthority>> converter = source -> {
+            List<String> cognitoGroups = source.getClaimAsStringList("cognito:groups");
+
+            Collection<GrantedAuthority> roles = cognitoGroups.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            return roles;
+        };
+
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(converter);
+        return jwtAuthenticationConverter;
+    }
+
     @ConfigurationProperties(prefix = "app.security")
     public record SecurityProperties(
+            String idp,
             List<Request> requests,
             Cors cors
     ) {

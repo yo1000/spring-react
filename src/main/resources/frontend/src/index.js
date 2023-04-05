@@ -17,22 +17,52 @@ function format(template, params) {
   )(...Object.values(params).map(p => p ?? ''))
 }
 
+/**
+ * @typedef {object} Oidc
+ * @property {string} authority
+ * @property {string} clientId
+ * @property {string} redirectUri
+ * @property {string} authorizationEndpoint
+ * @property {string} tokenEndpoint
+ * @property {string} userinfoEndpoint
+ * @property {string} signoutUri
+ */
+
+/**
+ * @typedef {object} Config
+ * @property {Oidc} oidc
+ */
+
 fetch('/api/config')
   .then(resp => {
     if (!resp.ok) throw new Error(resp.statusText)
 
     return resp.json()
   })
-  .then(data => {
+  .then(/** @type {Config} */ data => {
+    const authority = data.oidc.authority
+    const clientId = data.oidc.clientId
+    const redirectUri = data.oidc.redirectUri
+
+    const authorizationEndpointTemplate = data.oidc.authorizationEndpoint
+    const tokenEndpointTemplate = data.oidc.tokenEndpoint
+    const userinfoEndpointTemplate = data.oidc.userinfoEndpoint
+
     const oidcConfig = {
-      authority: data.oidc.authority,
-      client_id: data.oidc.clientId,
-      redirect_uri: data.oidc.redirectUri,
+      authority: authority,
+      client_id: clientId,
+      redirect_uri: redirectUri,
       response_type: 'code',
       metadata: {
-        authorization_endpoint: data.oidc.authorizationEndpoint,
-        token_endpoint: data.oidc.tokenEndpoint,
-        userinfo_endpoint: data.oidc.userinfoEndpoint,
+        authorization_endpoint: format(authorizationEndpointTemplate, {
+          authority: authority,
+        }),
+        token_endpoint: format(tokenEndpointTemplate, {
+          authority: authority,
+        }),
+        userinfo_endpoint: format(userinfoEndpointTemplate, {
+          authority: authority,
+        }),
       },
       scope: "openid",
       loadUserInfo: true,
@@ -45,19 +75,15 @@ fetch('/api/config')
         )
       },
       onRemoveUser: () => {
-        const template = data.oidc.signoutUriTemplate
-
-        const authority = data.oidc.authority
-        const clientId = data.oidc.clientId
-        const redirectUri = encodeURIComponent(data.oidc.redirectUri)
+        const signoutUriTemplate = data.oidc.signoutUri
         const idToken = localStorage.getItem("idtoken")
         localStorage.removeItem("idtoken")
 
-        window.location = format(template, {
+        window.location = format(signoutUriTemplate, {
           authority: authority,
           clientId: clientId,
-          redirectUri: redirectUri,
-          idToken: idToken
+          redirectUri: encodeURIComponent(redirectUri),
+          idToken: idToken,
         })
       }
     }
@@ -75,15 +101,29 @@ fetch('/api/config')
   .catch(reason => {
     console.log(reason)
 
+    const authority = process.env.OIDC_AUTHORITY
+    const clientId = process.env.OIDC_CLIENT_ID
+    const redirectUri = process.env.OIDC_REDIRECT_URI
+
+    const authorizationEndpointTemplate = process.env.OIDC_AUTHORIZATION_ENDPOINT
+    const tokenEndpointTemplate = process.env.OIDC_TOKEN_ENDPOINT
+    const userinfoEndpointTemplate = process.env.OIDC_USERINFO_ENDPOINT
+
     const oidcConfig = {
-      authority: process.env.OIDC_AUTHORITY,
-      client_id: process.env.OIDC_CLIENT_ID,
-      redirect_uri: process.env.OIDC_REDIRECT_URI,
+      authority: authority,
+      client_id: clientId,
+      redirect_uri: redirectUri,
       response_type: 'code',
       metadata: {
-        authorization_endpoint: process.env.OIDC_AUTHORIZATION_ENDPOINT,
-        token_endpoint: process.env.OIDC_TOKEN_ENDPOINT,
-        userinfo_endpoint: process.env.OIDC_USERINFO_ENDPOINT,
+        authorization_endpoint: format(authorizationEndpointTemplate, {
+          authority: authority,
+        }),
+        token_endpoint: format(tokenEndpointTemplate, {
+          authority: authority,
+        }),
+        userinfo_endpoint: format(userinfoEndpointTemplate, {
+          authority: authority,
+        }),
       },
       scope: "openid",
       loadUserInfo: true,
@@ -97,21 +137,16 @@ fetch('/api/config')
         )
       },
       onRemoveUser: () => {
-        const template = process.env.OIDC_SIGNOUT_URI_TEMPLATE
-
-        const authority = process.env.OIDC_AUTHORITY
-        const clientId = process.env.OIDC_CLIENT_ID
-        const redirectUri = encodeURIComponent(process.env.OIDC_REDIRECT_URI)
+        const signoutUriTemplate = process.env.OIDC_SIGNOUT_URI
         const idToken = localStorage.getItem("idtoken")
         localStorage.removeItem("idtoken")
 
-        window.location = format(template, {
+        window.location = format(signoutUriTemplate, {
           authority: authority,
           clientId: clientId,
-          redirectUri: redirectUri,
-          idToken: idToken
+          redirectUri: encodeURIComponent(redirectUri),
+          idToken: idToken,
         })
-
       }
     }
 

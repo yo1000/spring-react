@@ -50,7 +50,7 @@ module.exports = {
       process: 'process/browser',
     }),
     new Dotenv({
-      path: debug ? `.env.${process.env.NODE_ENV}` : '.env'
+      path: debug ? `.env.dev.${process.env.IDP}` : '.env'
     }),
   ],
   devServer: {

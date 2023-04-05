@@ -18,7 +18,7 @@ public class FrontendConfig {
                 String authorizationEndpoint,
                 String tokenEndpoint,
                 String userinfoEndpoint,
-                String signoutUriTemplate
+                String signoutUri
         ) {}
     }
 }

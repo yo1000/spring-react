@@ -127,7 +127,9 @@ public class SecurityConfig {
         Converter<Jwt, Collection<GrantedAuthority>> converter = source -> {
             List<String> cognitoGroups = source.getClaimAsStringList("cognito:groups");
 
-            Collection<GrantedAuthority> roles = cognitoGroups.stream()
+            Collection<GrantedAuthority> roles = Optional.ofNullable(cognitoGroups)
+                    .orElse(Collections.emptyList())
+                    .stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toCollection(ArrayList::new));
 

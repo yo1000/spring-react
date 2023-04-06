@@ -1,9 +1,30 @@
-import {Table} from "react-bootstrap";
+import {Badge, Table} from "react-bootstrap";
 import {useAuth} from "react-oidc-context";
 import {css} from "@emotion/react";
+import {useEffect, useState} from "react";
+import AuthoritiesClient from "../clients/AuthoritiesClient";
 
 export default function Home() {
   const style = css`
+    th {
+      width: 20%;
+    }
+    
+    td {
+      ul {
+        padding: 0;
+
+        li {
+          list-style: none;
+          
+          .badge {
+            width: 4rem;
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+    
     .table-striped-columns>:not(caption)>tr>:nth-child(2n) {
       --bs-table-accent-bg: none;
     }
@@ -15,6 +36,15 @@ export default function Home() {
   `
 
   const auth = useAuth()
+  const [authorities, setAuthorities] = useState([])
+
+  const authoritiesClient = new AuthoritiesClient(auth)
+
+  useEffect(() => {
+    authoritiesClient
+      .get()
+      .then(data => setAuthorities(data))
+  }, [auth])
 
   return (
     <div css={style}>
@@ -43,6 +73,19 @@ export default function Home() {
         <tr>
           <th>Family name</th>
           <td>{auth.user?.profile.family_name}</td>
+        </tr>
+        <tr>
+          <th>Authorities</th>
+          <td><ul>{authorities ? authorities.map(a => (
+            <li>
+              {
+                a.authorized
+                  ? <Badge bg="success">allow</Badge>
+                  : <Badge bg="danger">deny</Badge>
+              }
+              <code>{a.method} {a.uri}</code>
+            </li>
+          )) : ""}</ul></td>
         </tr>
         </tbody>
       </Table>

@@ -36,3 +36,4 @@ build/
 node_modules/
 **/frontend/node/
 **/resources/public/index.js*
+**/*__

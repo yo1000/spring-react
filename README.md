@@ -43,6 +43,8 @@ Setup cognito
 2. Create user
 3. Create group naming as "admin", and assign user to created group
 
+Following, replace variables in double brackets.
+
 ```shell
 ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments='
 -Dserver.error.whitelabel.enabled=true
@@ -58,6 +60,8 @@ Setup cognito
 -Dapp.frontend.oidc.signoutUri=${authority}/logout?client_id=${clientId}&logout_uri=${redirectUri}
 '
 ```
+
+Following, replace variables in double brackets.
 
 ```shell
 (cd src/main/resources/frontend && \

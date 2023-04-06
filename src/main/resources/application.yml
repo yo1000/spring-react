@@ -22,6 +22,7 @@ server:
 
 # app:
 #   security:
+#     idp: {keycloak|cognito}
 #     requests:
 #       - uri: {URI that must be protected}
 #         methods:

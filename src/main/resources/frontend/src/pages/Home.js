@@ -13,6 +13,7 @@ export default function Home() {
     td {
       ul {
         padding: 0;
+        margin-bottom: 0.25rem;
 
         li {
           list-style: none;
@@ -76,16 +77,22 @@ export default function Home() {
         </tr>
         <tr>
           <th>Authorities</th>
-          <td><ul>{authorities ? authorities.map(a => (
-            <li>
-              {
-                a.authorized
-                  ? <Badge bg="success">allow</Badge>
-                  : <Badge bg="danger">deny</Badge>
-              }
-              <code>{a.method} {a.uri}</code>
-            </li>
-          )) : ""}</ul></td>
+          <td><ul>
+            {
+              authorities
+                ? authorities.map(a => (
+                  <li>
+                    {
+                      a.authorized
+                        ? <Badge bg="success">allow</Badge>
+                        : <Badge bg="danger">deny</Badge>
+                    }
+                    <code>{a.method} {a.uri}</code>
+                  </li>
+                ))
+                : <></>
+            }
+          </ul></td>
         </tr>
         </tbody>
       </Table>

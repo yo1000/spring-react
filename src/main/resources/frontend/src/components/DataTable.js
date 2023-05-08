@@ -1,4 +1,3 @@
-import {Table} from "react-bootstrap"
 import React from "react"
 import {css} from "@emotion/react";
 
@@ -95,39 +94,29 @@ export default function DataTable({
           overflow-y: auto;
         }
 
-        .table {
-          margin: 0;
-
-          th,
+        table {
           td {
-            border-right: 1px solid var(--bs-border-color);
+            vertical-align: top;
           }
         }
       }
 
+      // Optional
       .dataTableBody {
-        // Optional
-        // max-height: calc(100vh - 240px);
-        // height: calc(100vh - 240px);
+        .editable td {}
+        .evenRow td {}
+        .oddRow td {}
 
-        .evenRow {
-          --bs-table-accent-bg: var(--bs-table-striped-bg);
-        }
-        .oddRow {
-          // Optional
+        .subRow td {
+          //
+          
+          &:last-of-type {}
         }
 
         input {
-          width: 100%;
-          font-family: monospace;
+          //
 
-          &[readonly] {
-            background-color: #e9ecef;;
-            border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
-            border-style: solid;
-            border-width: 1px;
-            border-radius: 2px;
-          }
+          &[readonly] {}
         }
       }
     }
@@ -141,7 +130,7 @@ export default function DataTable({
         " dataTableHead " +
         (!data || !data.length ? " dataEmpty " : "")
       ).trim()}>
-        <Table size="sm">
+        <table>
           <thead>
           <tr>
             {props.map(prop => (
@@ -159,13 +148,13 @@ export default function DataTable({
             ))}
           </tr>
           </thead>
-        </Table>
+        </table>
       </div>
       <div className={(
         " dataTableBody " +
         (!data || !data.length ? " dataEmpty " : "")
       ).trim()}>
-        <Table size="sm">
+        <table className={props.some(p => p.editable) ? "editable" : ""}>
           <tbody>
           <DataRows
             data={data}
@@ -175,7 +164,7 @@ export default function DataTable({
             autoWidth={autoWidth}
           />
           </tbody>
-        </Table>
+        </table>
       </div>
     </div>
   )
@@ -256,14 +245,16 @@ function DataRow({
   }
 
   return (
-    <tr data-modified={false}>
+    <tr data-modified={false} className={(
+      (rowIndex % 2 === 0 ? " evenRow " : " oddRow ") +
+      (rowSubIndex > 0 ? " subRow " : "")
+    ).trim()}>
       {
         props.map((prop, index) => {
           if (rowSubIndex > 0 && (!prop.name.startsWith(`${listName}.`))) return
 
           return <td
             className={(
-              (rowIndex % 2 === 0 ? " evenRow " : " oddRow ") +
               (prop.digitGrouping ? " digitGrouping " : "")
             ).trim()}
             rowSpan={(!prop.name.startsWith(`${listName}.`)) ? rowSpan : null}

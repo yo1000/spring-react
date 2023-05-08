@@ -3,8 +3,7 @@ import ReactDOM from "react-dom";
 import {AuthProvider} from "react-oidc-context";
 import {BrowserRouter} from "react-router-dom";
 import App from "./App";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {defaultTheme, Provider} from "@adobe/react-spectrum";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root')
@@ -90,11 +89,13 @@ fetch('/api/config')
 
     root.render(
       <React.StrictMode>
-        <AuthProvider {...oidcConfig}>
-          <BrowserRouter>
-            <App/>
-          </BrowserRouter>
-        </AuthProvider>
+          <AuthProvider {...oidcConfig}>
+            <BrowserRouter>
+              <Provider theme={defaultTheme}>
+                <App/>
+              </Provider>
+            </BrowserRouter>
+          </AuthProvider>
       </React.StrictMode>
     )
   })
@@ -154,7 +155,9 @@ fetch('/api/config')
       <React.StrictMode>
         <AuthProvider {...oidcConfig}>
           <BrowserRouter>
-            <App/>
+            <Provider theme={defaultTheme}>
+              <App/>
+            </Provider>
           </BrowserRouter>
         </AuthProvider>
       </React.StrictMode>

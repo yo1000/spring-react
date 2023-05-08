@@ -1,8 +1,8 @@
-import {Badge, Table} from "react-bootstrap";
 import {useAuth} from "react-oidc-context";
 import {css} from "@emotion/react";
 import {useEffect, useState} from "react";
 import AuthoritiesClient from "../clients/AuthoritiesClient";
+import {Badge} from "@adobe/react-spectrum";
 
 export default function Home() {
   const style = css`
@@ -49,53 +49,61 @@ export default function Home() {
 
   return (
     <div css={style}>
-      <Table striped="columns">
+      <table>
+        <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+        </thead>
         <tbody>
         <tr>
-          <th>ID</th>
-          <td>{auth.user?.profile.sub}</td>
+          <td>ID</td>
+          <td><code>{auth.user?.profile.sub}</code></td>
         </tr>
         <tr>
-          <th>Username</th>
-          <td>{auth.user?.profile.preferred_username}</td>
+          <td>Username</td>
+          <td><code>{auth.user?.profile.preferred_username}</code></td>
         </tr>
         <tr>
-          <th>Email</th>
-          <td>{auth.user?.profile.email}</td>
+          <td>Email</td>
+          <td><code>{auth.user?.profile.email}</code></td>
         </tr>
         <tr>
-          <th>Name</th>
-          <td>{auth.user?.profile.name}</td>
+          <td>Name</td>
+          <td><code>{auth.user?.profile.name}</code></td>
         </tr>
         <tr>
-          <th>Given name</th>
-          <td>{auth.user?.profile.given_name}</td>
+          <td>Given name</td>
+          <td><code>{auth.user?.profile.given_name}</code></td>
         </tr>
         <tr>
-          <th>Family name</th>
-          <td>{auth.user?.profile.family_name}</td>
+          <td>Family name</td>
+          <td><code>{auth.user?.profile.family_name}</code></td>
         </tr>
         <tr>
-          <th>Authorities</th>
-          <td><ul>
-            {
-              authorities
-                ? authorities.map(a => (
-                  <li>
-                    {
-                      a.authorized
-                        ? <Badge bg="success">allow</Badge>
-                        : <Badge bg="danger">deny</Badge>
-                    }
-                    <code>{a.method} {a.uri}</code>
-                  </li>
-                ))
-                : <></>
-            }
-          </ul></td>
+          <td>Authorities</td>
+          <td>
+            <ul>
+              {
+                authorities
+                  ? authorities.map(a => (
+                    <li>
+                      {
+                        a.authorized
+                          ? <Badge variant="positive">allow</Badge>
+                          : <Badge variant="negative">deny</Badge>
+                      }
+                      <code>{a.method} {a.uri}</code>
+                    </li>
+                  ))
+                  : <></>
+              }
+            </ul>
+          </td>
         </tr>
         </tbody>
-      </Table>
+      </table>
     </div>
   )
 }

@@ -2,6 +2,7 @@ import {useAuth} from "react-oidc-context";
 import React, {useEffect, useState} from "react";
 import DataTable from "../components/DataTable";
 import WeaponsClient from "../clients/WeaponsClient";
+import Content from "../components/Content";
 
 export default function Weapons() {
   const auth = useAuth()
@@ -33,45 +34,47 @@ export default function Weapons() {
   }, [auth])
 
   return (
-    <DataTable
-      id="dataTable"
-      data={weapons}
-      props={[{
-        name: "id",
-        head: "Name",
-      }, {
-        name: "code",
-        head: "Code",
-      }, {
-        name: "name",
-        head: "Name",
-        editable: true,
-      }, {
-        name: "price",
-        head: "Price",
-        editable: true,
-        digitGrouping: true,
-      }, {
-        name: "str",
-        head: "Str",
-        editable: true,
-        digitGrouping: true,
-      }, {
-        name: "hit",
-        head: "Hit",
-        editable: true,
-        digitGrouping: true,
-      }, {
-        name: "items.name",
-        head: "Remodel item",
-        editable: true,
-      }, {
-        name: "items.quantity",
-        head: "Remodel qty",
-        editable: true,
-        digitGrouping: true,
-      }]}
-      autoSelect={true}
-    />
+    <Content heading="Weapons">
+      <DataTable
+        id="dataTable"
+        data={weapons}
+        props={[{
+          name: "id",
+          head: "Name",
+        }, {
+          name: "code",
+          head: "Code",
+        }, {
+          name: "name",
+          head: "Name",
+          editable: true,
+        }, {
+          name: "price",
+          head: "Price",
+          editable: true,
+          digitGrouping: true,
+        }, {
+          name: "str",
+          head: "Str",
+          editable: true,
+          digitGrouping: true,
+        }, {
+          name: "hit",
+          head: "Hit",
+          editable: true,
+          digitGrouping: true,
+        }, {
+          name: "items.name",
+          head: "Remodel item",
+          editable: true,
+        }, {
+          name: "items.quantity",
+          head: "Remodel qty",
+          editable: true,
+          digitGrouping: true,
+        }]}
+        autoSelect={true}
+      />
+    </Content>
   )
 }

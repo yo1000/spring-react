@@ -1,11 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from "react-dom/client";
 import {AuthProvider} from "react-oidc-context";
 import {BrowserRouter} from "react-router-dom";
 import App from "./App";
-import {defaultTheme, Provider} from "@adobe/react-spectrum";
 
-const root = ReactDOM.createRoot(
+import './index.css';
+
+const root = createRoot(
   document.getElementById('root')
 )
 
@@ -91,9 +92,7 @@ fetch('/api/config')
       <React.StrictMode>
           <AuthProvider {...oidcConfig}>
             <BrowserRouter>
-              <Provider theme={defaultTheme}>
-                <App/>
-              </Provider>
+              <App/>
             </BrowserRouter>
           </AuthProvider>
       </React.StrictMode>
@@ -155,9 +154,7 @@ fetch('/api/config')
       <React.StrictMode>
         <AuthProvider {...oidcConfig}>
           <BrowserRouter>
-            <Provider theme={defaultTheme}>
-              <App/>
-            </Provider>
+            <App/>
           </BrowserRouter>
         </AuthProvider>
       </React.StrictMode>

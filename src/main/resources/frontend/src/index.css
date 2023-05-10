@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    outline: none !important;
+}
+
+html, body {
+    margin: 0;
+}
+
+.dataTableBody {
+    max-height: calc(100vh - 220px);
+    height: calc(100vh - 220px);
+}

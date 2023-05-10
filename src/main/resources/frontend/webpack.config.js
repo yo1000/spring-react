@@ -2,7 +2,9 @@ const debug = process.env.NODE_ENV === 'development'
 const webpack = require('webpack')
 const path = require('path')
 const TerserPlugin = require("terser-webpack-plugin")
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const Dotenv = require('dotenv-webpack');
+const tailwindcss = require('tailwindcss');
 
 module.exports = {
   entry: {
@@ -37,12 +39,12 @@ module.exports = {
       use: ['@svgr/webpack', 'url-loader']
     }, {
       test: /\.(sass|less|css)$/,
-      use: ['style-loader', 'css-loader']
+      use: ['style-loader', 'css-loader', 'postcss-loader']
     }]
   },
   optimization: debug ? {} : {
     minimize: true,
-    minimizer: [new TerserPlugin()],
+    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
     moduleIds: 'named',
   },
   plugins: [

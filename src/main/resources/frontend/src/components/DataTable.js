@@ -89,34 +89,52 @@ export default function DataTable({
 
         overflow-x: hidden;
         overflow-y: scroll;
-        
+
+        table {
+          min-width: inherit;
+        }
+
         &.dataEmpty {
           overflow-y: auto;
         }
+      }
 
-        table {
-          td {
-            vertical-align: top;
-          }
+      .dataTableHead {
+        th {
+          border-bottom-width: 1px;
         }
       }
 
-      // Optional
       .dataTableBody {
+        td {
+          vertical-align: top;
+        }
+
         .editable td {}
-        .evenRow td {}
+        
+        .evenRow td {
+          --tw-bg-opacity: 1;
+          background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+        }
+        
         .oddRow td {}
 
-        .subRow td {
-          //
+        .subRow {
+          border-top-style: none;
           
           &:last-of-type {}
         }
 
         input {
-          //
+          border: 1px solid var(--spectrum-table-border-color, var(--spectrum-alias-border-color-mid));
+          font-family: monospace;
 
-          &[readonly] {}
+          padding-left: 4px;
+          padding-right: 4px;
+
+          &[readonly] {
+            color: var(--spectrum-table-cell-text-color-disabled,var(--spectrum-alias-text-color-disabled));
+          }
         }
       }
     }
@@ -130,10 +148,10 @@ export default function DataTable({
         " dataTableHead " +
         (!data || !data.length ? " dataEmpty " : "")
       ).trim()}>
-        <table>
+        <table className="min-w-full divide-y divide-gray-300">
           <thead>
           <tr>
-            {props.map(prop => (
+            {props.map((prop, index) => (
               <th style={autoWidth ? {
                 width: autoWidth,
                 minWidth: autoWidth,
@@ -142,7 +160,9 @@ export default function DataTable({
                 width: prop.columnWidth,
                 minWidth: prop.columnWidth,
                 maxWidth: prop.columnWidth,
-              }} className={prop.digitGrouping ? "digitGrouping" : null}>
+              }} scope="col" className={
+                `${prop.digitGrouping ? "digitGrouping" : ""} py-3.5 ${index === 0 ? "pl-2" : ""} pr-2 text-left text-sm font-semibold text-gray-900`
+              }>
                 {prop.head}
               </th>
             ))}
@@ -154,8 +174,8 @@ export default function DataTable({
         " dataTableBody " +
         (!data || !data.length ? " dataEmpty " : "")
       ).trim()}>
-        <table className={props.some(p => p.editable) ? "editable" : ""}>
-          <tbody>
+        <table className={`min-w-full divide-y divide-gray-300 ${props.some(p => p.editable) ? "editable" : ""}`}>
+          <tbody className=" divide-y divide-gray-200">
           <DataRows
             data={data}
             props={props}
@@ -245,18 +265,16 @@ function DataRow({
   }
 
   return (
-    <tr data-modified={false} className={(
-      (rowIndex % 2 === 0 ? " evenRow " : " oddRow ") +
-      (rowSubIndex > 0 ? " subRow " : "")
-    ).trim()}>
+    <tr data-modified={false} className={`${rowIndex % 2 === 0 ? "evenRow" : "oddRow"} ${rowSubIndex > 0 ? "subRow" : ""}`}>
       {
         props.map((prop, index) => {
           if (rowSubIndex > 0 && (!prop.name.startsWith(`${listName}.`))) return
 
           return <td
-            className={(
-              (prop.digitGrouping ? " digitGrouping " : "")
-            ).trim()}
+            className={editable
+              ? `${prop.digitGrouping ? "digitGrouping" : ""} ${rowSubIndex === 0 ? "pt-2" : ""} pb-2 ${index === 0 ? "pl-2" : ""} pr-2 text-sm font-medium text-gray-900`
+              : `${prop.digitGrouping ? "digitGrouping" : ""} py-4 ${index === 0 ? "pl-2" : ""} pr-2 text-sm font-medium text-gray-900`
+            }
             rowSpan={(!prop.name.startsWith(`${listName}.`)) ? rowSpan : null}
             data-row={rowIndex}
             data-row-sub={rowSubIndex}
@@ -279,6 +297,10 @@ function DataRow({
           }{
             editable ? (
               <input
+                className={prop.editable
+                  ? "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  : "block w-full rounded-md border-0 bg-gray-50 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                }
                 data-focusable={true}
                 name={prop.name}
                 defaultValue={prop.editable ? (

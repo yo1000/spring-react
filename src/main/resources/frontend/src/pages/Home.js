@@ -1,41 +1,10 @@
 import {useAuth} from "react-oidc-context";
-import {css} from "@emotion/react";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import AuthoritiesClient from "../clients/AuthoritiesClient";
-import {Badge} from "@adobe/react-spectrum";
+import Badge from "../components/Badge";
+import Content from "../components/Content";
 
 export default function Home() {
-  const style = css`
-    th {
-      width: 20%;
-    }
-    
-    td {
-      ul {
-        padding: 0;
-        margin-bottom: 0.25rem;
-
-        li {
-          list-style: none;
-          
-          .badge {
-            width: 4rem;
-            margin-right: 0.5rem;
-          }
-        }
-      }
-    }
-    
-    .table-striped-columns>:not(caption)>tr>:nth-child(2n) {
-      --bs-table-accent-bg: none;
-    }
-    
-    .table-striped-columns>:not(caption)>tr>:nth-child(2n + 1) {
-      --bs-table-accent-bg: var(--bs-table-striped-bg);
-      color: var(--bs-table-striped-color);
-    }
-  `
-
   const auth = useAuth()
   const [authorities, setAuthorities] = useState([])
 
@@ -48,51 +17,81 @@ export default function Home() {
   }, [auth])
 
   return (
-    <div css={style}>
-      <table>
+    <Content heading="Signed in user">
+      <table className="min-w-full divide-y divide-gray-300">
         <thead>
         <tr>
-          <th>Key</th>
-          <th>Value</th>
+          <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+            Key
+          </th>
+          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+            Value
+          </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-200">
         <tr>
-          <td>ID</td>
-          <td><code>{auth.user?.profile.sub}</code></td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            ID
+          </td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            <code>{auth.user?.profile.sub}</code>
+          </td>
         </tr>
         <tr>
-          <td>Username</td>
-          <td><code>{auth.user?.profile.preferred_username}</code></td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            Username
+          </td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            <code>{auth.user?.profile.preferred_username}</code>
+          </td>
         </tr>
         <tr>
-          <td>Email</td>
-          <td><code>{auth.user?.profile.email}</code></td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            Email
+          </td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            <code>{auth.user?.profile.email}</code>
+          </td>
         </tr>
         <tr>
-          <td>Name</td>
-          <td><code>{auth.user?.profile.name}</code></td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            Name
+          </td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            <code>{auth.user?.profile.name}</code>
+          </td>
         </tr>
         <tr>
-          <td>Given name</td>
-          <td><code>{auth.user?.profile.given_name}</code></td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            Given name
+          </td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            <code>{auth.user?.profile.given_name}</code>
+          </td>
         </tr>
         <tr>
-          <td>Family name</td>
-          <td><code>{auth.user?.profile.family_name}</code></td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            Family name
+          </td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            <code>{auth.user?.profile.family_name}</code>
+          </td>
         </tr>
         <tr>
-          <td>Authorities</td>
-          <td>
-            <ul>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            Authorities
+          </td>
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+            <ul role="list">
               {
                 authorities
                   ? authorities.map(a => (
-                    <li>
+                    <li key={`${a.method}.${a.uri}`} className="flex gap-x-4 py-1">
                       {
                         a.authorized
-                          ? <Badge variant="positive">allow</Badge>
-                          : <Badge variant="negative">deny</Badge>
+                          ? <Badge color="green" width={30}>allow</Badge>
+                          : <Badge color="red" width={30}>deny</Badge>
                       }
                       <code>{a.method} {a.uri}</code>
                     </li>
@@ -104,6 +103,6 @@ export default function Home() {
         </tr>
         </tbody>
       </table>
-    </div>
+    </Content>
   )
 }

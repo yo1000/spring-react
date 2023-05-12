@@ -144,10 +144,7 @@ export default function DataTable({
 
   return (
     <div id={id} className="dataTable" css={style}>
-      <div className={(
-        " dataTableHead " +
-        (!data || !data.length ? " dataEmpty " : "")
-      ).trim()}>
+      <div className={`dataTableHead ${!data || !data.length ? "dataEmpty" : ""}`}>
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
           <tr>
@@ -170,12 +167,9 @@ export default function DataTable({
           </thead>
         </table>
       </div>
-      <div className={(
-        " dataTableBody " +
-        (!data || !data.length ? " dataEmpty " : "")
-      ).trim()}>
+      <div className={`dataTableBody ${!data || !data.length ? "dataEmpty" : ""}`}>
         <table className={`min-w-full divide-y divide-gray-300 ${props.some(p => p.editable) ? "editable" : ""}`}>
-          <tbody className=" divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200">
           <DataRows
             data={data}
             props={props}

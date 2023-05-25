@@ -14,7 +14,7 @@ import {css} from "@emotion/react";
 
 /**
  *
- * @param {string} id
+ * @param {?string} id
  * @param {any[]} data  Supported data formats are limited.
  *
  * Should match one of following formats.
@@ -60,8 +60,8 @@ import {css} from "@emotion/react";
  *   ```
  *
  * @param {Props[]} props
- * @param {string} combinationKey
- * @param {boolean} autoSelect
+ * @param {?string} combinationKey
+ * @param {?boolean} autoSelect
  * @returns {JSX.Element}
  * @constructor
  */

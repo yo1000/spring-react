@@ -71,3 +71,44 @@ PORT=3000 \
 API_BASE_URI=http://localhost:8080 \
 npx webpack serve)
 ```
+
+Project structure
+----------------------------------------
+
+* `(B)`: Backend
+* `(F)`: Frontend
+* `(*)`: Others
+
+```
+/ ...................................... (*) Project root
+|_ src/
+|   |_ main/
+|       |_ java/ ....................... (B) Backend root
+|       |   |_ (...)/
+|       |       |_ config/ ............. (B) Configuration
+|       |       |_ domain/ ............. (B) Domain
+|       |       |_ infrastructure/ ..... (B) Persistence
+|       |       |_ presentation/ ....... (B) Controller
+|       |
+|       |_ resources/
+|           |_ frontend/ ............... (F) Frontend root
+|           |   |_ src/
+|           |   |   |_ clients/ ........ (F) API clients
+|           |   |   |_ components/ ..... (F) Screen parts
+|           |   |   |_ pages/ .......... (F) Screen
+|           |   |   |_ App,js .......... (F) Routing
+|           |   |   |_ index.js ........ (F) JS root
+|           |   |
+|           |   |_ public/
+|           |   |   |_ index.html ...... (F) HTML root
+|           |   |
+|           |   |_ package.json ........ (F) Node.JS build config
+|           |   |_ webpack.config.js ... (F) Webpack build config
+|           |
+|           |_ application.yml ......... (B) Spring Boot config file
+|           |_ schema.sql .............. (B) Development database setup file
+|
+|_ compose.yml ......................... (*) IDP and others
+|_ keycloak-setup.sh ................... (*) IDP setup script
+|_ pom.xml ............................. (B) Java build config
+```

@@ -1,10 +1,11 @@
 import React, {Fragment, useEffect, useState} from 'react'
-import {Popover, Transition} from '@headlessui/react'
+import {Dialog, Popover, Transition} from '@headlessui/react'
 import {useAuth} from "react-oidc-context";
 import {minimatch} from "minimatch";
 import {site} from "../site"
 import AuthoritiesClient from "../clients/AuthoritiesClient";
 import {useLocation} from "react-router-dom";
+import {ChevronDownIcon, UserCircleIcon, XMarkIcon} from "@heroicons/react/20/solid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -65,7 +66,7 @@ export default function Header({primaryCategories}) {
               {/* Logo */}
               <div className="flex flex-1">
                 <a href="/" className="-m-1.5 p-1.5">
-                  <h1>{site.title}</h1>
+                  <h1 className="font-extrabold">{site.title}</h1>
                 </a>
               </div>
 
@@ -110,7 +111,7 @@ export default function Header({primaryCategories}) {
                           >
                             <Popover.Panel className="absolute inset-x-0 top-full text-gray-500 sm:text-sm">
                               {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                              <div className="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
+                              <div className="absolute inset-0 top-1/2 bg-white shadow-md" aria-hidden="true" />
 
                               <div className="relative bg-white">
                                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -182,16 +183,41 @@ export default function Header({primaryCategories}) {
                       : auth.error
                       ? <div>{`Oops... ${auth.error.message}`}</div>
                       : auth.isAuthenticated
-                      ? <button className="text-base font-semibold leading-6 text-gray-900"
-                          onClick={() => {
-                            localStorage.setItem("idtoken", auth.user?.id_token)
-                            void auth.removeUser();
-                          }}>Sign out
-                      </button>
-                      : <button className="text-base font-semibold leading-6 text-gray-900"
-                          onClick={() => void auth.signinRedirect()}>
-                        Sign in <span aria-hidden="true">&rarr;</span>
-                      </button>
+                      ? (
+                        <Popover className="relative">
+                          <Popover.Button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                            <UserCircleIcon className="inline-block h-7 mr-1.5"/>
+                            <span>{auth.user?.profile?.name}</span>
+                            <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+                          </Popover.Button>
+
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-150"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                          >
+                            <Popover.Panel className="absolute left-1/2 z-10 mt-2 flex w-screen max-w-min -translate-x-1/2 px-4">
+                              <div className="w-44 shrink rounded-lg bg-white p-2 text-sm font-semibold leading-6 text-gray-900 shadow-md ring-1 ring-gray-900/5">
+                                <a className="block p-2 hover:text-indigo-600" onClick={() => {
+                                  localStorage.setItem("idtoken", auth.user?.id_token)
+                                  void auth.removeUser()
+                                }}>
+                                  Sign out
+                                </a>
+                              </div>
+                            </Popover.Panel>
+                          </Transition>
+                        </Popover>
+                      ) : (
+                        <button className="text-base font-semibold leading-6 text-gray-900"
+                                onClick={() => void auth.signinRedirect()}>
+                          Sign in <span aria-hidden="true">&rarr;</span>
+                        </button>
+                      )
                   }
                 </div>
               </div>

@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Form({...props}) {
   return (
-    <form className="mt-4 bg-white shadow-md ring-1 ring-gray-900/5 sm:rounded-lg md:col-span-2">
+    <form className="mt-4 bg-white shadow ring-1 ring-gray-900/5 sm:rounded-lg md:col-span-2">
       {props.children}
     </form>
   )

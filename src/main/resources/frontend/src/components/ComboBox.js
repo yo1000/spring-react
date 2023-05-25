@@ -56,7 +56,7 @@ export default function ComboBox({items, onChange, onChangeItem, label, value}) 
         </Combobox.Button>
 
         {filteredItems.length > 0 && (
-          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {filteredItems.map((item) => (
               <Combobox.Option
                 key={item.value}

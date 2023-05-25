@@ -4,12 +4,12 @@ import {css} from "@emotion/react";
 /**
  * @typedef {object} Props
  * @property {string} name
- * @property {string?} head
- * @property {boolean?} editable
- * @property {number?} maxLength
- * @property {string?} columnWidth
- * @property {boolean?} digitGrouping
- * @property {Function?} onChange
+ * @property {?string} head
+ * @property {?boolean} editable
+ * @property {?number} maxLength
+ * @property {?string} columnWidth
+ * @property {?boolean} digitGrouping
+ * @property {?Function} onChange
  */
 
 /**

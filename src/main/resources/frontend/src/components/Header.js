@@ -1,42 +1,44 @@
-import React, {useEffect, useState} from 'react'
-import {Dialog, Disclosure, Popover} from '@headlessui/react'
-import {Bars3Icon, XMarkIcon,} from '@heroicons/react/24/outline'
-import {
-  BeakerIcon,
-  ChevronDownIcon,
-  FireIcon,
-  SparklesIcon,
-  SwatchIcon,
-  UserCircleIcon,
-  WrenchScrewdriverIcon,
-} from '@heroicons/react/20/solid'
+import React, {Fragment, useEffect, useState} from 'react'
+import {Popover, Transition} from '@headlessui/react'
 import {useAuth} from "react-oidc-context";
 import {minimatch} from "minimatch";
 import {site} from "../site"
 import AuthoritiesClient from "../clients/AuthoritiesClient";
+import {useLocation} from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Header() {
-  const menuItems = [{
-    name: "Items", href: "/items", authority: "/api/items", icon: BeakerIcon, subItems: null,
-  }, {
-    name: "Spells", href: null, authority: null, icon: FireIcon, subItems: null,
-  }, {
-    name: "Weapons", href: "/weapons", authority: "/api/weapons", icon: WrenchScrewdriverIcon, subItems: null,
-  }, {
-    name: "Refine", href: null, icon: SparklesIcon, subItems: [{
-      name: "Cards", href: "/cards", authority: "/api/cards", icon: SwatchIcon, description: null,
-    }]
-  }, {
-    name: "Others", href: null, icon: null, subItems: [{
-      name: "Empty", href: "/empty", authority: null, icon: null, description: null,
-    }, {
-      name: "Empty12345678901234567890", href: "/empty", authority: null, icon: null, description: null,
-    }]
-  }]
+/**
+ * @typedef {object} MenuItem
+ * @property {string} name
+ * @property {string} href
+ * @property {?string} authority
+ */
+
+/**
+ * @typedef {object} SecondaryCategory
+ * @property {string} name
+ * @property {?JSX.Element} icon
+ * @property {MenuItem[]} items
+ */
+
+/**
+ * @typedef {object} PrimaryCategory
+ * @property {string} name
+ * @property {?JSX.Element} icon
+ * @property {SecondaryCategory[]} secondaryCategories
+ */
+
+/**
+ *
+ * @param {PrimaryCategory[]} primaryCategories
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export default function Header({primaryCategories}) {
+  const location = useLocation()
 
   const auth = useAuth()
   const [authorities, setAuthorities] = useState([])
@@ -54,207 +56,149 @@ export default function Header() {
     return minimatch(normalized, pattern)
   }
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   return (
-    <header className="bg-white">
-      <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-        <div className="flex lg:flex-1">
-          <a href="/" className="-m-1.5 p-1.5">
-            <h1>{site.title}</h1>
-          </a>
-        </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
-        <Popover.Group className="hidden lg:flex lg:gap-x-12">
-          {menuItems
-            .filter(menuItem => menuItem.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, menuItem.authority)))
-            .map(menuItem => (menuItem.subItems
-                ? <Popover className="group/menu relative">
-                  <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 group-hover/menu:text-indigo-600">
-                    {menuItem.icon
-                      ? <menuItem.icon className="inline-block h-6 w-6 me-1 text-gray-600 group-hover/menu:text-indigo-600" aria-hidden="true" />
-                      : <></>
-                    }
-                    {menuItem.name}
-                    <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                  </Popover.Button>
-                  <Popover.Panel className="absolute top-full z-10 mt-3 w-fit max-w-fit overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-gray-900/5">
-                    <div className="p-4">
-                      {menuItem.subItems
-                        .filter(subItem => subItem.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, subItem.authority)))
-                        .map((subItem) => (
-                          <div
-                            key={subItem.name}
-                            className="group/sub relative flex items-center gap-x-6 w-fit rounded-lg p-4 text-sm leading-6"
-                          >
-                            <div className="flex-auto w-max">
-                              <a href={subItem.href} className="block font-semibold text-gray-900 group-hover/sub:text-indigo-400">
-                                {subItem.icon
-                                  ? <subItem.icon className="inline-block h-6 w-6 me-1 text-gray-600 group-hover/sub:text-indigo-400" aria-hidden="true" />
-                                  : <></>
-                                }
-                                {subItem.name}
-                                <span className="absolute inset-0" />
-                              </a>
-                              <p className="mt-1 text-gray-600">{subItem.description}</p>
-                            </div>
-                          </div>
-                        ))
-                      }
-                    </div>
-                  </Popover.Panel>
-                </Popover>
-                : menuItem.href
-                ? <a href={menuItem.href} className="group text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600">
-                  {menuItem.icon
-                    ? <menuItem.icon className="inline-block h-6 w-6 me-1 text-gray-600 group-hover:text-indigo-600 group-hover:text-indigo-600" aria-hidden="true" />
-                    : <></>
-                  }
-                  {menuItem.name}
+    <div className="bg-white">
+      <header className="relative bg-white">
+        <nav aria-label="Top" className="mx-auto max-w-full sm:px-6 lg:px-8">
+          <div className="px-4 pb-14 sm:px-0 sm:pb-0">
+            <div className="flex h-16 items-center justify-between">
+              {/* Logo */}
+              <div className="flex flex-1">
+                <a href="/" className="-m-1.5 p-1.5">
+                  <h1>{site.title}</h1>
                 </a>
-                : <span className="text-sm font-semibold leading-6 text-gray-900">
-                  {menuItem.icon
-                    ? <menuItem.icon className="inline-block h-6 w-6 me-1 text-gray-600" aria-hidden="true" />
-                    : <></>
-                  }
-                  {menuItem.name}
-                </span>
-            ))}
-        </Popover.Group>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          {
-            auth.activeNavigator === 'signinSilent'
-              ? <div>Signing you in...</div>
-              : auth.activeNavigator === 'signoutRedirect'
-              ? <div>Signing you out...</div>
-              : auth.isLoading
-              ? <div>Loading...</div>
-              : auth.error
-              ? <div>{`Oops... ${auth.error.message}`}</div>
-              : auth.isAuthenticated
-              ? <>
-                <Popover className="group/menu relative">
-                  <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 group-hover/menu:text-indigo-600">
-                    <UserCircleIcon className="inline-block h-6 w-6 me-1 text-gray-600 group-hover/menu:text-indigo-600" aria-hidden="true" />
-                    {auth.user?.profile.name}
-                    <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                  </Popover.Button>
-                  <Popover.Panel className="absolute right-0 top-full z-10 mt-3 max-w-md overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-gray-900/5">
-                    <div className="p-4">
-                      <div className="group/sub relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6">
-                        <div className="flex-auto">
-                          <button className="text-sm font-semibold leading-6 text-gray-900 group-hover/sub:text-indigo-400"
-                            onClick={() => {
-                              localStorage.setItem("idtoken", auth.user?.id_token)
-                              void auth.removeUser();
-                            }}>Sign out
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </Popover.Panel>
-                </Popover>
-              </>
-              : <button className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600" onClick={() => void auth.signinRedirect()}>
-                Sign in <span aria-hidden="true">&rarr;</span>
-              </button>
-          }
-        </div>
-      </nav>
+              </div>
 
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-        <div className="fixed inset-0 z-10" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
-              <h1>{site.title}</h1>
-            </a>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                {menuItems
-                  .filter(menuItem => menuItem.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, menuItem.authority)))
-                  .map(menuItem => (menuItem.subItems
-                    ? <Disclosure as="div" className="-mx-3">
+              {/* Flyout menus */}
+              <Popover.Group className="absolute inset-x-0 bottom-0 sm:static sm:flex-1 sm:self-stretch">
+                <div className="flex h-14 space-x-8 overflow-x-auto border-t px-4 pb-px sm:h-full sm:justify-center sm:overflow-visible sm:border-t-0 sm:pb-0">
+                  {primaryCategories
+                    .filter(primaryCategory => (
+                      primaryCategory.secondaryCategories.some(secondaryCategory => (
+                        secondaryCategory.items.some(item => item.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, item.authority)))
+                      ))
+                    ))
+                    .map((primaryCategory, primaryCategoryIndex) => (
+                    <Popover key={`primary-${primaryCategoryIndex}`} className="flex z-10">
                       {({ open }) => (
                         <>
-                          <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50">
-                            {menuItem.name}
-                            <ChevronDownIcon
-                              className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
-                              aria-hidden="true"
-                            />
-                          </Disclosure.Button>
-                          <Disclosure.Panel className="mt-2 space-y-2">
-                            {menuItem.subItems
-                              .filter(subItem => subItem.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, subItem.authority)))
-                              .map((subItem) => (
-                                <Disclosure.Button
-                                  key={subItem.name}
-                                  as="a"
-                                  href={subItem.href}
-                                  className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                  {subItem.name}
-                              </Disclosure.Button>
-                            ))}
-                          </Disclosure.Panel>
+                          <div className="relative flex">
+                            <Popover.Button
+                              className={classNames(
+                                open
+                                  ? "border-indigo-600 text-indigo-600"
+                                  : "border-transparent text-gray-700 hover:text-gray-800",
+                                !open && primaryCategory.secondaryCategories.some(s => s.items.some(i => location.pathname === i.href))
+                                  ? "border-transparent text-indigo-600 hover:text-indigo-700"
+                                  : "",
+                                "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
+                              )}
+                            >
+                              {primaryCategory.icon ? <primaryCategory.icon className="h-5 mr-1.5"/> : <></>}
+                              {primaryCategory.name}
+                            </Popover.Button>
+                          </div>
+
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition ease-in duration-150"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Popover.Panel className="absolute inset-x-0 top-full text-gray-500 sm:text-sm">
+                              {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
+                              <div className="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
+
+                              <div className="relative bg-white">
+                                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                                  <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10 pb-12 pt-10 md:grid-cols-2 lg:gap-x-8">
+                                    {primaryCategory.secondaryCategories
+                                      .filter(secondaryCategory => (
+                                        secondaryCategory.items.some(item => item.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, item.authority)))
+                                      ))
+                                      .map((secondaryCategory, secondaryCategoryIndex) => (
+                                      <div key={`secondary-${secondaryCategoryIndex}`} className="grid grid-cols-1 gap-x-6 gap-y-10 lg:gap-x-8">
+                                        <div>
+                                          <p className="relative h-5 font-medium text-gray-900">
+                                            {secondaryCategory.icon ? <secondaryCategory.icon className="inline-block h-5 mr-1.5"/> : <></>}
+                                            <span className="inline-block absolute inset-y-0">
+                                            {secondaryCategory.name}
+                                            </span>
+                                          </p>
+                                          <div className="mt-4 border-t border-gray-200 pt-6 sm:grid sm:grid-cols-4 sm:gap-x-6">
+                                            {secondaryCategory.items
+                                              .filter(item => item.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, item.authority)))
+                                              .reduce((acc, v, i) => {
+                                                if (i % 4 === 0) {
+                                                  acc.push([])
+                                                }
+                                                acc[acc.length - 1].push(v)
+                                                return acc
+                                              }, [])
+                                              .map((itemGroup, itemGroupIndex) => (
+                                                <ul
+                                                  role="list"
+                                                  key={`item-${itemGroupIndex}`}
+                                                  aria-label={`item-${itemGroupIndex}`}
+                                                  className="space-y-6 sm:space-y-4"
+                                                >
+                                                  {itemGroup.map((item, itemIndex) => (
+                                                    <li key={item.name} className="flex">
+                                                      <a href={item.href} className="hover:text-gray-800">
+                                                        {item.name}
+                                                      </a>
+                                                    </li>
+                                                  ))}
+                                                </ul>
+                                              ))}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </Popover.Panel>
+                          </Transition>
                         </>
                       )}
-                    </Disclosure>
-                    : <a
-                      href={menuItem.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                      {menuItem.name}
-                    </a>
-                    ))
-                }
-              </div>
-              <div className="py-6">
-                {
-                  auth.activeNavigator === 'signinSilent'
-                    ? <div>Signing you in...</div>
-                    : auth.activeNavigator === 'signoutRedirect'
-                    ? <div>Signing you out...</div>
-                    : auth.isLoading
-                    ? <div>Loading...</div>
-                    : auth.error
-                    ? <div>{`Oops... ${auth.error.message}`}</div>
-                    : auth.isAuthenticated
-                    ? <button className="text-base font-semibold leading-6 text-gray-900"
-                      onClick={() => {
-                        localStorage.setItem("idtoken", auth.user?.id_token)
-                        void auth.removeUser();
-                      }}>Sign out
-                    </button>
-                    : <button className="text-base font-semibold leading-6 text-gray-900" onClick={() => void auth.signinRedirect()}>
-                      Sign in <span aria-hidden="true">&rarr;</span>
-                    </button>
-                }
+                    </Popover>
+                  ))}
+                </div>
+              </Popover.Group>
+
+              <div className="flex flex-1 items-center justify-end">
+                <div className="ml-4 flow-root lg:ml-8">
+                  {
+                    auth.activeNavigator === 'signinSilent'
+                      ? <div>Signing you in...</div>
+                      : auth.activeNavigator === 'signoutRedirect'
+                      ? <div>Signing you out...</div>
+                      : auth.isLoading
+                      ? <div>Loading...</div>
+                      : auth.error
+                      ? <div>{`Oops... ${auth.error.message}`}</div>
+                      : auth.isAuthenticated
+                      ? <button className="text-base font-semibold leading-6 text-gray-900"
+                          onClick={() => {
+                            localStorage.setItem("idtoken", auth.user?.id_token)
+                            void auth.removeUser();
+                          }}>Sign out
+                      </button>
+                      : <button className="text-base font-semibold leading-6 text-gray-900"
+                          onClick={() => void auth.signinRedirect()}>
+                        Sign in <span aria-hidden="true">&rarr;</span>
+                      </button>
+                  }
+                </div>
               </div>
             </div>
           </div>
-        </Dialog.Panel>
-      </Dialog>
-    </header>
+        </nav>
+      </header>
+    </div>
   )
 }

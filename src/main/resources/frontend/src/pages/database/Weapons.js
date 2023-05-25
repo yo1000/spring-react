@@ -1,8 +1,8 @@
 import {useAuth} from "react-oidc-context";
 import React, {useEffect, useState} from "react";
-import DataTable from "../components/DataTable";
-import WeaponsClient from "../clients/WeaponsClient";
-import Content from "../components/Content";
+import DataTable from "../../components/DataTable";
+import WeaponsClient from "../../clients/WeaponsClient";
+import Content from "../../components/Content";
 
 export default function Weapons() {
   const auth = useAuth()

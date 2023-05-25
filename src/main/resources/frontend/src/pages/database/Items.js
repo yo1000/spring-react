@@ -1,8 +1,8 @@
 import {useAuth} from "react-oidc-context";
 import React, {useEffect, useState} from "react";
-import DataTable from "../components/DataTable";
-import ItemsClient from "../clients/ItemsClient";
-import Content from "../components/Content";
+import DataTable from "../../components/DataTable";
+import ItemsClient from "../../clients/ItemsClient";
+import Content from "../../components/Content";
 
 export default function Items() {
   const auth = useAuth()

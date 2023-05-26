@@ -129,7 +129,7 @@ export default function Header({primaryCategories}) {
                                             {secondaryCategory.name}
                                             </span>
                                           </p>
-                                          <div className="mt-4 border-t border-gray-200 pt-6 sm:grid sm:grid-cols-4 sm:gap-x-6">
+                                          <div className="mt-4 border-t border-gray-200 pt-6 sm:grid sm:grid-cols-2 sm:gap-x-6">
                                             {secondaryCategory.items
                                               .filter(item => item.authority == null || authorities.filter(a => a.authorized).some(a => matchPath(a.uri, item.authority)))
                                               .reduce((acc, v, i) => {

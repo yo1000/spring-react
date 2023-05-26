@@ -17,6 +17,8 @@ import {
 import ComboBoxDemo from "./pages/showcase/ComboBoxDemo";
 import FormDemo from "./pages/showcase/FormDemo";
 import InputDemo from "./pages/showcase/InputDemo";
+import NotificationDemo from "./pages/showcase/NotificationDemo";
+import ButtonDemo from "./pages/showcase/ButtonDemo";
 
 export default function App() {
   /** @type PrimaryCategory[] */
@@ -67,6 +69,10 @@ export default function App() {
         href: "/showcase/form",
         authority: null,
       }, {
+        name: "Button",
+        href: "/showcase/button",
+        authority: null,
+      }, {
         name: "Input",
         href: "/showcase/input",
         authority: null,
@@ -77,6 +83,10 @@ export default function App() {
       }, {
         name: "DataTable",
         href: "/showcase/dataTable",
+        authority: null,
+      }, {
+        name: "Notification",
+        href: "/showcase/notification",
         authority: null,
       }]
     }]
@@ -95,9 +105,11 @@ export default function App() {
           <Route path="/cards" element={<Cards/>} />
 
           <Route path="/showcase/form" element={<FormDemo/>} />
+          <Route path="/showcase/button" element={<ButtonDemo/>} />
           <Route path="/showcase/input" element={<InputDemo/>} />
           <Route path="/showcase/comboBox" element={<ComboBoxDemo/>} />
           <Route path="/showcase/dataTable" element={<DataTableDemo/>} />
+          <Route path="/showcase/notification" element={<NotificationDemo/>} />
         </Routes>
       </div>
     </div>

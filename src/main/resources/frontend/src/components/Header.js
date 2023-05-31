@@ -1,11 +1,11 @@
 import React, {Fragment, useEffect, useState} from 'react'
-import {Dialog, Popover, Transition} from '@headlessui/react'
+import {Popover, Transition} from '@headlessui/react'
 import {useAuth} from "react-oidc-context";
 import {minimatch} from "minimatch";
 import {site} from "../site"
 import AuthoritiesClient from "../clients/AuthoritiesClient";
 import {useLocation} from "react-router-dom";
-import {ChevronDownIcon, UserCircleIcon, XMarkIcon} from "@heroicons/react/20/solid";
+import {ChevronDownIcon, UserCircleIcon} from "@heroicons/react/20/solid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -15,6 +15,7 @@ function classNames(...classes) {
  * @typedef {object} MenuItem
  * @property {string} name
  * @property {string} href
+ * @property {?string} target
  * @property {?string} authority
  */
 
@@ -148,7 +149,10 @@ export default function Header({primaryCategories}) {
                                                 >
                                                   {itemGroup.map((item, itemIndex) => (
                                                     <li key={item.name} className="flex">
-                                                      <a href={item.href} className="hover:text-gray-800">
+                                                      <a href={item.href}
+                                                         target={item.target ? item.target : null}
+                                                         rel={item.target && item.target.endsWith("blank") ? "noopener noreferrer" : null}
+                                                         className="hover:text-gray-800">
                                                         {item.name}
                                                       </a>
                                                     </li>

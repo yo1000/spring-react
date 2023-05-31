@@ -3,9 +3,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    url: 'jdbc:h2:mem:ff8;TRUNCATE_LARGE_LENGTH=TRUE;DATABASE_TO_UPPER=FALSE'
+    url: jdbc:h2:mem:ff8;TRUNCATE_LARGE_LENGTH=TRUE;DATABASE_TO_UPPER=FALSE
     hikari:
       auto-commit: false
+  thymeleaf:
+    prefix: classpath:/report/templates/
   security:
     oauth2:
       resourceserver:
@@ -20,30 +22,38 @@ server:
     whitelabel:
       enabled: false
 
-# app:
-#   security:
-#     idp: {keycloak|cognito}
-#     requests:
-#       - uri: {URI that must be protected}
-#         methods:
-#           (None: Default, Same as when setting all methods.)
-#           - GET
-#           - POST
-#           - PUT
-#           - PATCH
-#           - DELETE
-#           - OPTIONS
-#         authorities:
-#           (None: Default, Same as when only authenticated.)
-#           - authorityName1
-#           - authorityName2
-#           - ...
-#     cors:
-#       allowed-origins:
-#         (None: Default, Cross-origin requests are not allowed.)
-#         - https:// ...
-#         - http:// ...
 app:
+  report:
+    fonts:
+      gothic:
+        name: Gothic
+        resource: classpath:report/fonts/ipagp.ttf
+      gothic-monospace:
+        name: GothicMonospace
+        resource: classpath:report/fonts/ipag.ttf
+
+  # security:
+  #   idp: {keycloak|cognito}
+  #   requests:
+  #     - uri: {URI that must be protected}
+  #       methods:
+  #         (None: Default, Same as when setting all methods.)
+  #         - GET
+  #         - POST
+  #         - PUT
+  #         - PATCH
+  #         - DELETE
+  #         - OPTIONS
+  #       authorities:
+  #         (None: Default, Same as when only authenticated.)
+  #         - authorityName1
+  #         - authorityName2
+  #         - ...
+  #   cors:
+  #     allowed-origins:
+  #       (None: Default, Cross-origin requests are not allowed.)
+  #       - https:// ...
+  #       - http:// ...
   security:
     requests:
       - uri: /api/items/**

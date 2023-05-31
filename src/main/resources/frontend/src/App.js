@@ -8,7 +8,7 @@ import DataTableDemo from "./pages/showcase/DataTableDemo";
 import Header from "./components/Header";
 import {
   BeakerIcon,
-  CircleStackIcon,
+  CircleStackIcon, PrinterIcon,
   PuzzlePieceIcon,
   SparklesIcon,
   Square2StackIcon,
@@ -21,6 +21,8 @@ import NotificationDemo from "./pages/showcase/NotificationDemo";
 import ButtonDemo from "./pages/showcase/ButtonDemo";
 
 export default function App() {
+  const reportBaseUri = process.env.REPORT_BASE_URI || ""
+
   /** @type PrimaryCategory[] */
   const primaryCategories = [{
     name: "Database",
@@ -88,6 +90,18 @@ export default function App() {
         name: "Notification",
         href: "/showcase/notification",
         authority: null,
+      }]
+    }]
+  }, {
+    name: "Reporting",
+    icon: PrinterIcon,
+    secondaryCategories: [{
+      name: "Demo",
+      icon: null,
+      items: [{
+        name: "Junction Menu PDF",
+        href: `${reportBaseUri}/report/junctionMenuReport.pdf`,
+        target: "_blank",
       }]
     }]
   }]

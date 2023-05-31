@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Junction</title>
+    <!--/* Local only -->
+    <style>
+        @font-face {
+            -fs-font-subset: complete-font;
+            font-family: 'IPAGothic';
+            src: url("../fonts/ipagp.ttf");
+        }
+
+        @font-face {
+            -fs-font-subset: complete-font;
+            font-family: 'IPAGothicMonospace';
+            src: url("../fonts/ipag.ttf");
+        }
+
+        html {
+            border: 1px solid #f0f;
+        }
+
+        * {
+            background: rgba(255, 192, 255, .25);
+        }
+    </style>
+    <!--*/-->
+    <!-- General styles -->
+    <style th:inline="css">
+        @font-face {
+            -fs-font-subset: complete-font;
+            font-family: /*[[${fonts.gothic().name()}]]*/'IPAGothic';
+        }
+
+        @font-face {
+            -fs-font-subset: complete-font;
+            font-family: /*[[${fonts.gothicMonospace().name()}]]*/'IPAGothicMonospace';
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        html {
+            min-width: 210mm !important;
+            max-width: 210mm !important;
+
+            /* When page breaks occur, remove the height-size style */
+            /*min-height: 297mm !important;*/
+            /*max-height: 297mm !important;*/
+        }
+
+        * {
+            font-family: /*[[${fonts.gothic().name()}]]*/'IPAGothic';
+            margin: 0;
+            font-size: 5mm;
+        }
+
+        code,
+        code * {
+            font-family: /*[[${fonts.gothicMonospace().name()}]]*/'IPAGothicMonospace';
+            font-size: 5.5mm;
+        }
+    </style>
+    <!-- Page styles -->
+    <style>
+        .display {
+            min-width: 180mm;
+            max-width: 180mm;
+
+            min-height: 135mm;
+            max-height: 135mm;
+
+            background: #000;
+
+            position: relative;
+            margin: 9mm 15mm 0;
+        }
+        .display.pageBreak {
+            margin-top: 18mm;
+        }
+
+        .header .notice {
+            display: inline-block;
+            position: absolute;
+
+            width: 133mm;
+            height: 8mm;
+            top: 4mm;
+            left: 0;
+
+            border: 1mm solid #444;
+            border-color: #666 #222 #222 #666;
+
+            background: #444;
+            color: #fff;
+        }
+        .header .notice span {
+            display: inline-block;
+
+            margin-top: 1.25mm;
+            margin-left: 8mm;
+        }
+        .header .title {
+            display: inline-block;
+            position: absolute;
+
+            width: 43mm;
+            height: 12mm;
+            top: 0;
+            left: 135mm;
+
+            border: 1mm solid #444;
+            border-color: #666 #222 #222 #666;
+
+            background: #444;
+            color: #fff;
+        }
+        .header .title span {
+            display: inline-block;
+
+            margin-top: 3.5mm;
+            margin-left: 4mm;
+        }
+
+        .help {
+            display: inline-block;
+            position: absolute;
+
+            width: 170mm;
+            height: 14mm;
+            top: 14mm;
+            left: 4mm;
+
+            border: 1mm solid #444;
+            border-color: #666 #222 #222 #666;
+
+            background: #444;
+            color: #fff;
+        }
+        .help span {
+            display: inline-block;
+
+            margin-top: 4.25mm;
+            margin-left: 4mm;
+        }
+        .help label {
+            display: inline-block;
+            position: absolute;
+
+            margin-top: -1.5mm;
+            margin-left: 0;
+
+            font-size: 4mm;
+
+            color: #ccc;
+        }
+        .help label.shadow {
+            margin-top: -1mm;
+            margin-left: .5mm;
+
+            color: #222;
+        }
+
+        .status .avatar {
+            display: inline-block;
+            position: absolute;
+
+            width: 20mm;
+            height: 36mm;
+            top: 32mm;
+            left: 9mm;
+
+            background: #fff;
+        }
+
+        .status .avatar span {
+            display: inline-block;
+
+            margin-top: 2mm;
+            margin-left: 2mm;
+
+            color: #888;
+        }
+
+        .status .name {
+            display: inline-block;
+            position: absolute;
+
+            width: 50mm;
+            height: 8mm;
+            top: 32mm;
+            left: 32mm;
+
+            color: #fff;
+        }
+        .status .name span {
+            display: inline-block;
+        }
+
+        .status .level {
+            display: inline-block;
+            position: absolute;
+
+            width: 50mm;
+            height: 8mm;
+            top: 44mm;
+            left: 32mm;
+
+            color: #fff;
+        }
+        .status .level label {
+            display: inline-block;
+            position: absolute;
+        }
+        .status .level span {
+            display: inline-block;
+            position: absolute;
+
+            width: 14mm;
+            left: 10mm;
+
+            text-align: right;
+        }
+
+        .status .hp {
+            display: inline-block;
+            position: absolute;
+
+            width: 50mm;
+            height: 8mm;
+            top: 56mm;
+            left: 32mm;
+
+            color: #fff;
+        }
+        .status .hp label {
+            display: inline-block;
+            position: absolute;
+        }
+        .status .hp .currentHp {
+            display: inline-block;
+            position: absolute;
+
+            width: 14mm;
+            left: 10mm;
+
+            text-align: right;
+        }
+        .status .hp .separator {
+            display: inline-block;
+            position: absolute;
+
+            left: 24mm;
+        }
+        .status .hp .maxHp {
+            display: inline-block;
+            position: absolute;
+
+            width: 14mm;
+            left: 27mm;
+
+            text-align: right;
+        }
+
+        .status .currentExp {
+            display: inline-block;
+            position: absolute;
+
+            width: 80mm;
+            height: 8mm;
+            top: 78mm;
+            left: 4mm;
+
+            color: #fff;
+        }
+        .status .currentExp label {
+            display: inline-block;
+            position: absolute;
+        }
+        .status .currentExp span {
+            display: inline-block;
+            position: absolute;
+
+            width: 18mm;
+            left: 50mm;
+
+            text-align: right;
+        }
+
+        .status .nextLevel {
+            display: inline-block;
+            position: absolute;
+
+            width: 80mm;
+            height: 8mm;
+            top: 86mm;
+            left: 4mm;
+
+            color: #fff;
+        }
+        .status .nextLevel label {
+            display: inline-block;
+            position: absolute;
+        }
+        .status .nextLevel span {
+            display: inline-block;
+            position: absolute;
+
+            width: 18mm;
+            left: 50mm;
+
+            text-align: right;
+        }
+
+        .commands {
+            display: inline-block;
+            position: absolute;
+
+            width: 39mm;
+            height: 41mm;
+            top: 30mm;
+            left: 135mm;
+
+            border: 1mm solid #444;
+            border-color: #666 #222 #222 #666;
+
+            background: #444;
+            color: #fff;
+        }
+        .commands label {
+            display: inline-block;
+            position: absolute;
+
+            margin-top: -1.5mm;
+            margin-left: 0;
+
+            font-size: 4mm;
+
+            color: #ccc;
+        }
+        .commands label.shadow {
+            margin-top: -1mm;
+            margin-left: .5mm;
+
+            color: #222;
+        }
+        .commands .item {
+            display: inline-block;
+            position: absolute;
+
+            left: 4mm;
+        }
+        .commands .command1 {
+            top: 7mm;
+        }
+        .commands .command2 {
+            top: 15mm;
+        }
+        .commands .command3 {
+            top: 23mm;
+        }
+        .commands  .command4 {
+            top: 31mm;
+        }
+
+        .junction {
+            display: inline-block;
+            position: absolute;
+
+            width: 178mm;
+            height: 40mm;
+            top: 93mm;
+            left: 0mm;
+
+            border: 1mm solid #444;
+            border-color: #666 #222 #222 #666;
+
+            background: #444;
+            color: #fff;
+        }
+        .junction .item,
+        .junction .item * {
+            display: inline-block;
+            position: absolute;
+        }
+        .junction .item {
+            width: 76mm;
+            height: 5mm;
+        }
+        .junction .item label {
+            top: 0mm;
+            left: 0mm;
+        }
+        .junction .item .magic {
+            top: 0mm;
+            left: 20mm;
+        }
+        .junction .item .status code {
+            width: 26mm;
+
+            top: 0mm;
+            left: 50mm;
+
+            text-align: right;
+        }
+        .junction .hp {
+            top: 1mm;
+            left: 8mm;
+        }
+        .junction .str {
+            top: 9mm;
+            left: 8mm;
+        }
+        .junction .vit {
+            top: 17mm;
+            left: 8mm;
+        }
+        .junction .mag {
+            top: 25mm;
+            left: 8mm;
+        }
+        .junction .spr {
+            top: 33mm;
+            left: 8mm;
+        }
+        .junction .spd {
+            top: 9mm;
+            left: 92mm;
+        }
+        .junction .eva {
+            top: 17mm;
+            left: 92mm;
+        }
+        .junction .hit {
+            top: 25mm;
+            left: 92mm;
+        }
+        .junction .luck {
+            top: 33mm;
+            left: 92mm;
+        }
+    </style>
+</head>
+<body class="page">
+<div id="root">
+    <div class="display"
+            th:each="junctionMenu,iterStat : ${junctionMenus}"
+            th:class="${iterStat.index > 0 && iterStat.index % 2 == 0} ? 'display pageBreak' : 'display'">
+        <div class="header">
+            <div class="notice">
+                <span th:each="noticeLabel : ${junctionMenu.labels().notices()}"
+                        th:text="${noticeLabel}">
+                    Junction
+                </span>
+            </div>
+            <div class="title">
+                <span th:text="${junctionMenu.labels().title()}">
+                    Junction
+                </span>
+            </div>
+        </div>
+
+        <div class="help">
+            <label class="shadow">HELP</label>
+            <label>HELP</label>
+            <span th:text="${junctionMenu.labels().help()}">
+            Junctioning
+            </span>
+        </div>
+
+        <div class="status">
+            <div class="avatar">
+                <span>NO IMAGE</span>
+            </div>
+
+            <div class="name">
+                <span th:text="${junctionMenu.status().name()}">Name</span>
+            </div>
+            <div class="level">
+                <label th:text="${junctionMenu.labels().level()}">Lv</label>
+                <span>
+                    <code th:text="${junctionMenu.status().level()}">81</code>
+                </span>
+            </div>
+            <div class="hp">
+                <label th:text="${junctionMenu.labels().hp()}">HP</label>
+                <span class="currentHp">
+                    <code th:text="${junctionMenu.status().currentHp()}">1188</code>
+                </span>
+                <span class="separator">/</span>
+                <span class="maxHp">
+                    <code th:text="${junctionMenu.status().maxHp()}">8811</code>
+                </span>
+            </div>
+
+            <div class="currentExp">
+                <label th:text="${junctionMenu.labels().currentExp()}">Current EXP</label>
+                <span>
+                    <code th:text="${junctionMenu.status().currentExp()}">11880</code>
+                    <code>p</code>
+                </span>
+            </div>
+            <div class="nextLevel">
+                <label th:text="${junctionMenu.labels().nextLevel()}">Next LEVEL</label>
+                <span>
+                    <code th:text="${junctionMenu.status().nextLevel()}">11880</code>
+                    <code>p</code>
+                </span>
+            </div>
+        </div>
+
+        <div class="commands">
+            <label class="shadow">COMMAND</label>
+            <label>COMMAND</label>
+            <span class="item command1" th:text="${junctionMenu.status().commands().command1()}">XXXX</span>
+            <span class="item command2" th:text="${junctionMenu.status().commands().command2()}">XXXX</span>
+            <span class="item command3" th:text="${junctionMenu.status().commands().command3()}">XXXX</span>
+            <span class="item command4" th:text="${junctionMenu.status().commands().command4()}">XXXX</span>
+        </div>
+
+        <div class="junction">
+            <div class="item hp">
+                <label th:text="${junctionMenu.labels().junctionHp()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().hpMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().hp()}">8011</code>
+                </span>
+            </div>
+            <div class="item str">
+                <label th:text="${junctionMenu.labels().junctionStr()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().strMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().str()}">8011</code>
+                </span>
+            </div>
+            <div class="item vit">
+                <label th:text="${junctionMenu.labels().junctionVit()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().vitMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().vit()}">8011</code>
+                </span>
+            </div>
+            <div class="item mag">
+                <label th:text="${junctionMenu.labels().junctionMag()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().magMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().mag()}">8011</code>
+                </span>
+            </div>
+            <div class="item spr">
+                <label th:text="${junctionMenu.labels().junctionSpr()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().sprMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().spr()}">8011</code>
+                </span>
+            </div>
+            <div class="item spd">
+                <label th:text="${junctionMenu.labels().junctionSpd()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().spdMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().spd()}">8011</code>
+                </span>
+            </div>
+            <div class="item eva">
+                <label th:text="${junctionMenu.labels().junctionEva()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().evaMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().eva()}">8011</code>
+                </span>
+            </div>
+            <div class="item hit">
+                <label th:text="${junctionMenu.labels().junctionHit()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().hitMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().hit()}">8011</code>
+                </span>
+            </div>
+            <div class="item luck">
+                <label th:text="${junctionMenu.labels().junctionLuck()}">XXX</label>
+                <span class="magic" th:text="${junctionMenu.status().junction().luckMagic()}">XXXXX</span>
+                <span class="status">
+                    <code th:text="${junctionMenu.status().junction().luck()}">8011</code>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--/*-->
+    <div class="display">
+    </div>
+    <div class="display pageBreak">
+    </div>
+    <div class="display">
+    </div>
+    <!--*/-->
+</div>
+</body>
+</html>

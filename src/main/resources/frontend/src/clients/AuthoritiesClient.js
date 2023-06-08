@@ -20,11 +20,16 @@ export default class AuthoritiesClient {
    * @returns {Promise<Authority[]>}
    */
   get = async () => {
-    const resp = await fetch(`${this.baseUri}/api/authorities`, {
-      headers: {
-        "Authorization": `Bearer ${this.auth.user?.access_token}`,
-      },
-    })
-    return await resp.json()
+    try {
+      const resp = await fetch(`${this.baseUri}/api/authorities`, {
+        headers: {
+          "Authorization": `Bearer ${this.auth.user?.access_token}`,
+        },
+      })
+      if (resp.ok) return await resp.json()
+    } catch (err) {
+      console.error(err)
+    }
+    return []
   }
 }

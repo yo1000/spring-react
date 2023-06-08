@@ -87,7 +87,7 @@ export default function Home() {
               {
                 authorities
                   ? authorities.map(a => (
-                    <li key={`${a.method}.${a.uri}`} className="flex gap-x-4 py-1">
+                    <li key={`${a.method}.${a.uri}`} className="flex gap-x-4 py-1 first:pt-0 last:pb-0">
                       {
                         a.authorized
                           ? <Badge color="green" width={30}>allow</Badge>

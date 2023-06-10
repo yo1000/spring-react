@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import DataTable from "../../components/DataTable";
 import ItemsClient from "../../clients/ItemsClient";
 import Content from "../../components/Content";
+import Panel, {FullWidth, Grid, Section} from "../../components/Panel";
 
 export default function Items() {
   const auth = useAuth()
@@ -23,32 +24,40 @@ export default function Items() {
 
   return (
     <Content heading="Items">
-      <DataTable
-        id="dataTable"
-        data={items}
-        props={[{
-          name: "id",
-          head: "ID",
-        }, {
-          name: "code",
-          head: "Code",
-        }, {
-          name: "name",
-          head: "Name",
-          editable: true,
-        }, {
-          name: "price",
-          head: "Price",
-          digitGrouping: true,
-          editable: true,
-        }, {
-          name: "sellPrice",
-          head: "SellPrice",
-          digitGrouping: true,
-          editable: true,
-        }]}
-        autoSelect={true}
-      />
+      <Panel>
+        <Section>
+          <Grid>
+            <FullWidth>
+              <DataTable
+                id="dataTable"
+                data={items}
+                props={[{
+                  name: "id",
+                  head: "ID",
+                }, {
+                  name: "code",
+                  head: "Code",
+                }, {
+                  name: "name",
+                  head: "Name",
+                  editable: true,
+                }, {
+                  name: "price",
+                  head: "Price",
+                  digitGrouping: true,
+                  editable: true,
+                }, {
+                  name: "sellPrice",
+                  head: "SellPrice",
+                  digitGrouping: true,
+                  editable: true,
+                }]}
+                autoSelect={true}
+              />
+            </FullWidth>
+          </Grid>
+        </Section>
+      </Panel>
     </Content>
   )
 }

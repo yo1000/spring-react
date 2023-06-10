@@ -15,7 +15,7 @@ import {
   WrenchScrewdriverIcon
 } from "@heroicons/react/20/solid";
 import ComboBoxDemo from "./pages/showcase/ComboBoxDemo";
-import FormDemo from "./pages/showcase/FormDemo";
+import LayoutDemo from "./pages/showcase/LayoutDemo";
 import InputDemo from "./pages/showcase/InputDemo";
 import NotificationDemo from "./pages/showcase/NotificationDemo";
 import ButtonDemo from "./pages/showcase/ButtonDemo";
@@ -67,8 +67,8 @@ export default function App() {
       name: "Demo",
       icon: null,
       items: [{
-        name: "Form",
-        href: "/showcase/form",
+        name: "Layout",
+        href: "/showcase/layout",
         authority: null,
       }, {
         name: "Button",
@@ -118,7 +118,7 @@ export default function App() {
           <Route path="/weapons" element={<Weapons/>} />
           <Route path="/cards" element={<Cards/>} />
 
-          <Route path="/showcase/form" element={<FormDemo/>} />
+          <Route path="/showcase/layout" element={<LayoutDemo/>} />
           <Route path="/showcase/button" element={<ButtonDemo/>} />
           <Route path="/showcase/input" element={<InputDemo/>} />
           <Route path="/showcase/comboBox" element={<ComboBoxDemo/>} />

@@ -1,63 +1,54 @@
 import React from "react";
 import Content from "../../components/Content";
 import Button from "../../components/Button";
+import Panel, {Flow, Section} from "../../components/Panel";
 
 export default function ButtonDemo() {
   return (
     <Content heading="Button Demo">
-      <div className="pt-6">
-        <div className="mb-2">
-          <Button>Default</Button>
-        </div>
+      <Panel>
+        <Section>
+          <Flow>
+            <Button>Default</Button>
+          </Flow>
+        </Section>
 
-        <hr className="mb-2"/>
+        <Section>
+          <Flow>
+            <Button type="primary">Primary</Button>
+            <Button type="secondary">Secondary</Button>
+          </Flow>
+        </Section>
 
-        <div className="mb-2">
-          <Button type="primary">Primary</Button>
-        </div>
-        <div className="mb-2">
-          <Button type="secondary">Secondary</Button>
-        </div>
+        <Section>
+          <Flow>
+            <Button type="info">Info</Button>
+            <Button type="help">Help</Button>
+          </Flow>
+        </Section>
 
-        <hr className="mb-2"/>
+        <Section>
+          <Flow>
+            <Button type="success">Success</Button>
+            <Button type="ok">OK</Button>
+          </Flow>
+        </Section>
 
-        <div className="mb-2">
-          <Button type="info">Info</Button>
-        </div>
-        <div className="mb-2">
-          <Button type="help">Help</Button>
-        </div>
+        <Section>
+          <Flow>
+            <Button type="warn">Warn</Button>
+            <Button type="attention">Attention</Button>
+          </Flow>
+        </Section>
 
-        <hr className="mb-2"/>
-
-        <div className="mb-2">
-          <Button type="success">Success</Button>
-        </div>
-        <div className="mb-2">
-          <Button type="ok">OK</Button>
-        </div>
-
-        <hr className="mb-2"/>
-
-        <div className="mb-2">
-          <Button type="warn">Warn</Button>
-        </div>
-        <div className="mb-2">
-          <Button type="attention">Attention</Button>
-        </div>
-
-        <hr className="mb-2"/>
-
-        <div className="mb-2">
-          <Button type="error">Error</Button>
-        </div>
-        <div className="mb-2">
-          <Button type="danger">Danger</Button>
-        </div>
-        <div className="mb-2">
-          <Button type="ng">NG</Button>
-        </div>
-      </div>
+        <Section>
+          <Flow>
+            <Button type="error">Error</Button>
+            <Button type="danger">Danger</Button>
+            <Button type="ng">NG</Button>
+          </Flow>
+        </Section>
+      </Panel>
     </Content>
   )
 }

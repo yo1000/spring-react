@@ -19,14 +19,14 @@ import {css} from "@emotion/react";
 export default function LayoutDemo() {
   const style = css`
     .dataTableBody {
-      max-height: calc(20rem);
-      height: calc(20rem);
+      max-height: 20rem;
+      height: 20rem;
     }
   `
 
   return (
     <div css={style}>
-      <Content heading="Form Demo">
+      <Content heading="Layout Demo">
         <Panel>
           <Alert
             heading="Heading text"
@@ -113,40 +113,6 @@ export default function LayoutDemo() {
             </Flow>
           </Section>
         </Panel>
-
-        {/*<Panel>*/}
-        {/*  <Section>*/}
-        {/*    <Grid>*/}
-        {/*      <ThirdWidth>*/}
-        {/*        <Input label="Third width"/>*/}
-        {/*      </ThirdWidth>*/}
-        {/*      <TwoThirdsWidth>*/}
-        {/*        <Input label="Two thirds width"/>*/}
-        {/*      </TwoThirdsWidth>*/}
-        {/*    </Grid>*/}
-        {/*    <Grid>*/}
-        {/*      <ThirdWidth>*/}
-        {/*        <Input label="Third width"/>*/}
-        {/*      </ThirdWidth>*/}
-        {/*      <TwoThirdsWidth>*/}
-        {/*        <Input label="Two thirds width"/>*/}
-        {/*      </TwoThirdsWidth>*/}
-        {/*    </Grid>*/}
-
-        {/*    <Flow align="right">*/}
-        {/*      <Button>Button</Button>*/}
-        {/*    </Flow>*/}
-        {/*    <Flow align="right">*/}
-        {/*      <Button>Button</Button>*/}
-        {/*    </Flow>*/}
-        {/*  </Section>*/}
-        {/*  <Section>*/}
-        {/*    <Flow align="right">*/}
-        {/*      <Button>Button</Button>*/}
-        {/*      <Button>Button</Button>*/}
-        {/*    </Flow>*/}
-        {/*  </Section>*/}
-        {/*</Panel>*/}
 
         <Panel>
           <Alert

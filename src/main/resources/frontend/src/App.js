@@ -20,6 +20,7 @@ import InputDemo from "./pages/showcase/InputDemo";
 import NotificationDemo from "./pages/showcase/NotificationDemo";
 import ButtonDemo from "./pages/showcase/ButtonDemo";
 import PanelDemo from "./pages/showcase/PanelDemo";
+import TextDemo from "./pages/showcase/TextDemo";
 
 export default function App() {
   const reportBaseUri = process.env.REPORT_BASE_URI || ""
@@ -80,6 +81,10 @@ export default function App() {
         href: "/showcase/button",
         authority: null,
       }, {
+        name: "Text",
+        href: "/showcase/text",
+        authority: null,
+      }, {
         name: "Input",
         href: "/showcase/input",
         authority: null,
@@ -126,6 +131,7 @@ export default function App() {
           <Route path="/showcase/layout" element={<LayoutDemo/>} />
           <Route path="/showcase/panel" element={<PanelDemo/>} />
           <Route path="/showcase/button" element={<ButtonDemo/>} />
+          <Route path="/showcase/text" element={<TextDemo/>} />
           <Route path="/showcase/input" element={<InputDemo/>} />
           <Route path="/showcase/comboBox" element={<ComboBoxDemo/>} />
           <Route path="/showcase/dataTable" element={<DataTableDemo/>} />

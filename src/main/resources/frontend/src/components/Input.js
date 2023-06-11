@@ -4,12 +4,13 @@ import React from 'react'
  * @typedef {Object} FormatType
  * @property {string} name
  */
+export class FormatType {
+  constructor(name) {
+    this.name = name
+  }
 
-export class FormatTypes {
-  /** @type {FormatType} */
-  static digitGrouping = { name: "digitgrouping" }
-  /** @type {FormatType} */
-  static dateGrouping = { name: "dategrouping" }
+  static digitGrouping = new FormatType("digitgrouping")
+  static dateGrouping = new FormatType("dategrouping")
 }
 
 /**
@@ -53,16 +54,16 @@ export default function Input({
         maxLength={maxLength}
         placeholder={placeholder}
         defaultValue={!readOnly ? (
-          formatType === FormatTypes.digitGrouping.name && plainDigitRegex.test(value)
+          formatType === FormatType.digitGrouping.name && plainDigitRegex.test(value)
             ? (value * 1).toLocaleString()
-            : formatType === FormatTypes.dateGrouping.name && plainDateRegex.test(value)
+            : formatType === FormatType.dateGrouping.name && plainDateRegex.test(value)
               ? `${`${value}`.substring(0, 4)}-${`${value}`.substring(4, 6)}-${`${value}`.substring(6, 8)}`
               : value
         ) : null}
         value={readOnly ? (
-          formatType === FormatTypes.digitGrouping.name && plainDigitRegex.test(value)
+          formatType === FormatType.digitGrouping.name && plainDigitRegex.test(value)
             ? (value * 1).toLocaleString()
-            : formatType === FormatTypes.dateGrouping.name && plainDateRegex.test(value)
+            : formatType === FormatType.dateGrouping.name && plainDateRegex.test(value)
               ? `${`${value}`.substring(0, 4)}-${`${value}`.substring(4, 6)}-${`${value}`.substring(6, 8)}`
               : value
         ) : null}
@@ -70,20 +71,20 @@ export default function Input({
         onFocus={async (event) => {
           if (!unformatOnFocus) return
           const {value} = event.target
-          if (!readOnly && formatType === FormatTypes.digitGrouping.name && formattedDigitRegex.test(value)) {
+          if (!readOnly && formatType === FormatType.digitGrouping.name && formattedDigitRegex.test(value)) {
             event.target.value = value.replaceAll(/[^0-9]+/ig, "")
           }
-          if (!readOnly && formatType === FormatTypes.dateGrouping.name && formattedDateRegex.test(value)) {
+          if (!readOnly && formatType === FormatType.dateGrouping.name && formattedDateRegex.test(value)) {
             event.target.value = value.replaceAll(/[^0-9]+/ig, "")
           }
         }}
         onBlur={async (event) => {
           if (!formatOnBlur) return
           const {value} = event.target
-          if (!readOnly && formatType === FormatTypes.digitGrouping.name && plainDigitRegex.test(value)) {
+          if (!readOnly && formatType === FormatType.digitGrouping.name && plainDigitRegex.test(value)) {
             event.target.value = (value * 1).toLocaleString()
           }
-          if (!readOnly && formatType === FormatTypes.dateGrouping.name && plainDateRegex.test(value)) {
+          if (!readOnly && formatType === FormatType.dateGrouping.name && plainDateRegex.test(value)) {
             event.target.value = `${`${value}`.substring(0, 4)}-${`${value}`.substring(4, 6)}-${`${value}`.substring(6, 8)}`
           }
         }}
@@ -92,6 +93,39 @@ export default function Input({
         ? <p className="inline-block w-2/5 mt-2 ml-2 text-sm text-gray-500" id="email-description">{description}</p>
         : <></>
       }
+    </div>
+  )
+}
+
+/**
+ *
+ * @param {?FormatType} format
+ * @param props
+ * @return {JSX.Element}
+ * @constructor
+ */
+export function Text({
+  format = null,
+  ...props
+}) {
+  const plainDigitRegex = /^\d+$/
+  const plainDateRegex = /^(?:000[1-9]|00[1-9][0-9]|0[1-9][0-9]{2}|[1-9][0-9]{3})(?:0[1-9]|1[0-2])(?:0[1-9]|[12][0-9]|3[01])$/
+  const formatType = format ? `${format.name}`.toLowerCase() : ""
+
+  const value = props.children
+
+  return (
+    <div className="relative">
+      <p className="inline-block w-full py-1.5 px-3 text-gray-900 sm:text-sm">
+        {
+          (typeof value) !== "string" ? value
+            : formatType === FormatType.digitGrouping.name && plainDigitRegex.test(value)
+              ? (value * 1).toLocaleString()
+              : formatType === FormatType.dateGrouping.name && plainDateRegex.test(value)
+                ? `${`${value}`.substring(0, 4)}-${`${value}`.substring(4, 6)}-${`${value}`.substring(6, 8)}`
+                : value
+        }
+      </p>
     </div>
   )
 }

@@ -1,8 +1,7 @@
 import React from "react";
 import Content from "../../components/Content";
 import Panel, {Flow, FullWidth, Grid, HalfWidth, QuarterWidth, Section, ThirdWidth} from "../../components/Panel";
-import Input from "../../components/Input";
-import Text from "../../components/Text";
+import Input, {Text} from "../../components/Input";
 
 export default function PanelDemo() {
   return (

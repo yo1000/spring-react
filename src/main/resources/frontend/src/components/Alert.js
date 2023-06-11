@@ -3,7 +3,7 @@ import { XCircleIcon } from '@heroicons/react/20/solid'
 
 /**
  *
- * @param {string} heading
+ * @param {?string} heading
  * @param {string[]} messages
  * @returns {JSX.Element}
  * @constructor

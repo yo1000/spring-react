@@ -21,6 +21,7 @@ import NotificationDemo from "./pages/showcase/NotificationDemo";
 import ButtonDemo from "./pages/showcase/ButtonDemo";
 import PanelDemo from "./pages/showcase/PanelDemo";
 import TextDemo from "./pages/showcase/TextDemo";
+import PaginatorDemo from "./pages/showcase/PaginatorDemo";
 
 export default function App() {
   const reportBaseUri = process.env.REPORT_BASE_URI || ""
@@ -97,6 +98,12 @@ export default function App() {
         href: "/showcase/dataTable",
         authority: null,
       }, {
+        name: "Paginator",
+        href: "/showcase/paginator",
+        authority: null,
+      }]
+    }, {
+      items: [{
         name: "Notification",
         href: "/showcase/notification",
         authority: null,
@@ -135,6 +142,7 @@ export default function App() {
           <Route path="/showcase/input" element={<InputDemo/>} />
           <Route path="/showcase/comboBox" element={<ComboBoxDemo/>} />
           <Route path="/showcase/dataTable" element={<DataTableDemo/>} />
+          <Route path="/showcase/paginator" element={<PaginatorDemo/>} />
           <Route path="/showcase/notification" element={<NotificationDemo/>} />
         </Routes>
       </div>

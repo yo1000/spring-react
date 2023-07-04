@@ -34,6 +34,12 @@ export default function ComboBox({items, onChange, onChangeItem, label, value}) 
       })
 
   useEffect(() => {
+    if (!selectedItem && !items.includes(selectedItem))  {
+      setSelectedItem(items.find(item => (item.value === value)) ?? null)
+    }
+  }, [items, value])
+
+  useEffect(() => {
     document.querySelectorAll(`[role="combobox"]`).forEach(element => {
       element.setAttribute("autocomplete", "off")
     })
